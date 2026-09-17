@@ -1,0 +1,12 @@
+{
+  "$schema": "./schemas/dependencies-lock.schema.json",
+  "schemaVersion": 1,
+  "dependencies": [
+    {
+      "id": "pdfjs",
+      "package": "pdfjs-dist",
+      "version": "6.3.289",
+      "tarballSha256": "06f25e887adc6489f04c9fcb14198c77e4e5623a59a0bba5c4cea5838a4f1241"
+    }
+  ]
+}

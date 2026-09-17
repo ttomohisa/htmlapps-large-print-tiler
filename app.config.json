@@ -1,0 +1,26 @@
+{
+  "$schema": "./schemas/app-config.schema.json",
+  "name": "Large Print Tiler",
+  "nameJa": "大判分割印刷",
+  "slug": "large-print-tiler",
+  "version": "1.0.0",
+  "description": "Split large-format documents into printable paper tiles while keeping physical dimensions explicit.",
+  "descriptionJa": "大判ドキュメントを、物理寸法を確認しながら家庭用紙サイズへ分割するブラウザーアプリです。",
+  "defaultLanguage": "auto",
+  "repository": {
+    "owner": "ttomohisa",
+    "name": "htmlapps-large-print-tiler"
+  },
+  "build": {
+    "output": "dist/index.html",
+    "blockRuntimeNetwork": true,
+    "selfExtract": {
+      "enabled": true,
+      "output": "dist/index.self-extract.html"
+    },
+    "sizeBudget": {
+      "readableWarningMb": 25,
+      "selfExtractWarningMb": 12
+    }
+  }
+}
