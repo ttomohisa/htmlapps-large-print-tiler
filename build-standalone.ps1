@@ -451,6 +451,13 @@ if ($appConfig.build.PSObject.Properties.Name -contains "sizeBudget" -and $appCo
   }
 }
 
+# Keep the tracked one-file entry point in sync only for the canonical build.
+# An explicit OutputPath is an independent export and must not replace it.
+if (-not $OutputPathWasSpecified) {
+  $rootAliasPath = Join-Path $Root (([string]$appConfig.slug) + ".html")
+  Copy-Item -LiteralPath $OutputPath -Destination $rootAliasPath -Force
+}
+
 $outputHash = Get-Sha256FileHex $OutputPath
 $outputSizeMb = [Math]::Round($readableBytes / 1MB, 2)
 Write-Host ""

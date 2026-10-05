@@ -122,6 +122,10 @@ Current limitations remain:
 
 The export filename is editable. Progress is measured in output PDF pages and includes assembly maps when enabled. Cancellation is cooperative and prevents a partial completed download.
 
+Each export owns the selected file, parsed source, source generation, and sanitized output filename captured when Save is pressed. File-picker and Remove controls are disabled while exporting, and queued picker/drop changes are ignored. Numeric layout changes are ignored while exporting, like the other layout controls. Duplicate Save actions do not start concurrent exports. Replacement/removal invalidates any older job: it cannot download, publish progress/errors, or clear a newer job's state. Cancellation prevents download even after the final output-page yield.
+
+Removing a file during reading invalidates that read. Undo re-reads an incomplete source under a fresh generation, preserving its edited filename. A fully read source retains its page selections and active page through Undo. A later selection wins over old read completions, errors, and Undo actions. A Reset confirmation opened before a source change or export cannot clear the newer work.
+
 Calibration changes do not change this workflow. A correction setting can increase or decrease tile count, so progress totals are calculated after the calibrated layout is known.
 
 ## 10. Image sizing rules retained
