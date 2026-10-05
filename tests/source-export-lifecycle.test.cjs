@@ -40,7 +40,7 @@ function harness() {
   const nodes = new Map(), listeners = new Map(), downloads = [], toasts = [], errors = [];
   let undo, gate = null, frameGate = null, confirm = null;
   const node = selector => {
-    if (!nodes.has(selector)) nodes.set(selector, { value: '', max: 1, hidden: true, disabled: false, textContent: '', classList: {add(){},remove(){}}, addEventListener(type, fn) { const key = `${selector}:${type}`; listeners.set(key, [...(listeners.get(key) || []), fn]); } });
+    if (!nodes.has(selector)) nodes.set(selector, { value: '', max: 1, hidden: true, disabled: false, textContent: '', setAttribute(name,value) { this[name]=value; }, querySelectorAll() { return []; }, classList: {add(){},remove(){}}, addEventListener(type, fn) { const key = `${selector}:${type}`; listeners.set(key, [...(listeners.get(key) || []), fn]); } });
     return nodes.get(selector);
   };
   const context = vm.createContext({
@@ -70,7 +70,7 @@ function harness() {
   run(html.slice(html.indexOf('      const paperPresets'), html.indexOf('      let language')));
   for (const name of ['safeNumber','clamp','getPaperSize','getActivePdfPage','currentSourceDimensions','getCalibrationFactors','calculateLayoutForDimensions','calculateLayout','calculateLayoutForPdfPage','getSelectedPdfPageIndexes','buildPdfExportPlan','pdfPageId','tileId','sanitizeFilenameBase','setDefaultExportFilename','resetExportProgress','setExportProgress','updateExportState','isSupportedFile','applyParsedSourceSize','isSvgFile','parsePngMetadata','parseJpegMetadata','parseCssLengthMm','parseImageSource','tileOverlayCommands','setNumericState','deflateBytes','rasterizeSource','binaryObject','buildTiledImagePdf','assemblyMapPdfCommands','pdfEscapeText','selectFile','removeFile']) run(extract(name));
   // Lifecycle helpers, when present, are exercised through the actual handlers.
-  for (const name of ['invalidateExport','ownsExport']) if (html.includes(`function ${name}(`)) run(extract(name));
+  for (const name of ['invalidateExport','ownsExport','parsePdfPageRange','clearPdfPageRange','syncPdfPageControls','applyPdfPageRange']) if (html.includes(`function ${name}(`)) run(extract(name));
   run(html.slice(html.indexOf('      function isPdfFile'), html.indexOf('      function buildCalibrationPdf')));
   run('yieldToBrowser=waitHook; decodeImageBitmap=decodeHook;');
   run(html.slice(html.indexOf("      $('#sourceFile').addEventListener"), html.indexOf("      $('#pdfPageList').addEventListener")));
@@ -305,4 +305,159 @@ test('late image-read errors cannot publish into a replacement PDF', async () =>
   await badRead;
   assert.equal(h.errors.length, 0);
   assert.equal(h.node('#exportStatus').textContent, before);
+});
+
+function sourceFunction(name) {
+  const match = new RegExp('^      (?:async )?function ' + name + '\\(', 'm').exec(html);
+  assert(match, name);
+  const tail = html.slice(match.index), next = /\n      (?:async )?function /.exec(tail);
+  return next ? tail.slice(0, next.index) : tail;
+}
+function fakeElement(tag) {
+  return {tag, dataset:{}, children:[], checked:false, disabled:false,
+    append(...children){this.children.push(...children);for(const child of children)child.parent=this;},
+    replaceChildren(...children){this.children=[];this.append(...children);},
+    setAttribute(name,value){this[name]=value;},
+    querySelectorAll(selector){
+      const all=this.children.flatMap(child=>[child,...child.querySelectorAll('*')]);
+      return selector==='*'?all:all.filter(child=>selector==='[data-pdf-page-index]'?child.dataset.pdfPageIndex!=null:selector==='input[type="checkbox"]'?child.type==='checkbox':selector==='[data-preview-pdf-page]'?child.dataset.previewPdfPage!=null:false);
+    },
+    querySelector(selector){return this.querySelectorAll(selector)[0]||null;},
+    closest(selector){if(selector==='[data-preview-pdf-page]'&&this.dataset.previewPdfPage!=null)return this;if(selector==='input[type="checkbox"]'&&this.type==='checkbox')return this;if(selector==='[data-pdf-page-index]'&&this.dataset.pdfPageIndex!=null)return this;return this.parent?.closest(selector)||null;}
+  };
+}
+function pageHarness() {
+  const h=harness();
+  h.context.formatMm=value=>String(value);
+  h.context.document.createElement=fakeElement;
+  const list=h.node('#pdfPageList');Object.assign(list,fakeElement('div'));
+  h.run(sourceFunction('renderPdfPageSelection'));
+  h.run(html.slice(html.indexOf("      $('#pdfPageList').addEventListener('change'"),html.indexOf("      $('#sourceWidth').addEventListener")));
+  h.context.update=()=>h.run('renderPdfPageSelection();updateExportState()');
+  h.draft=async(value)=>{h.node('#pdfPageRange').value=value;await h.emit('#pdfPageRange','input',{target:h.node('#pdfPageRange')});};
+  h.apply=()=>h.emit('#applyPdfPageRange','click');
+  h.preview=index=>list.children[index].children[1];
+  h.check=index=>list.children[index].children[0].children[0];
+  h.change=async(index,checked)=>{const input=h.check(index);input.checked=checked;await h.emit('#pdfPageList','change',{target:input});};
+  return h;
+}
+async function multi(h) {
+ const bytes=fs.readFileSync(path.join(__dirname,'fixtures/multipage.pdf'));
+ await h.select({name:'synthetic-pages.pdf',type:'application/pdf',size:bytes.length,arrayBuffer:async()=>Uint8Array.from(bytes).buffer});
+}
+
+
+test('range parser accepts one-based inclusive ranges, deduplicated in source order', () => {
+  const h=harness();h.run(sourceFunction('parsePdfPageRange'));
+  for (const [text,expected] of [['1',[0]],['3,1-2,2,3',[0,1,2]],[' 2 - 3 , 1 ',[0,1,2]],['2-2',[1]],['01,003',[0,2]]]) {
+    h.context.rangeText=text;assert.deepEqual(Array.from(h.run('parsePdfPageRange(rangeText, 3)')),expected);
+  }
+});
+test('range parser rejects all invalid endpoints before expanding any range', () => {
+  const h=harness();h.run(sourceFunction('parsePdfPageRange'));
+  for(const text of ['', ' ', '0','-1','1,','1,,2',',1','3-1','1-4','4','1.5','1e2','1–3','１-３','all','1--2','1-2-3','+1','NaN','Infinity','9007199254740992','1-9999999999999999999999999999999999999999']) {
+    h.context.rangeText=text;assert.throws(()=>h.run('parsePdfPageRange(rangeText,3)'),undefined,text);
+  }
+  h.run('addCount=0; OriginalSet=Set; Set=class extends OriginalSet { add(value) { addCount++; return super.add(value); } };');
+  assert.throws(()=>vm.runInContext("parsePdfPageRange('1-5000,5001',5000)",h.context,{timeout:100}));
+  assert.equal(h.run('addCount'),0,'validate every endpoint before any expansion');
+});
+test('range Apply replaces selection atomically; draft typing and invalid Apply preserve export', async()=>{
+  const h=pageHarness();await multi(h);
+  const original=h.run('selectedPdfPages');await h.draft('3,1-1,3');
+  assert.equal(h.run('selectedPdfPages'),original);assert.equal(h.node('#pdfPageRange').value,'3,1-1,3');
+  await h.apply();assert.equal(h.run('JSON.stringify(getSelectedPdfPageIndexes())'),'[0,2]');
+  assert.equal(h.node('#pdfPageRange').value,'');assert.equal(h.check(1).checked,false);
+  assert.equal(h.node('#pdfSelectedPagesValue').textContent,'2 / 3');
+  const applied=h.run('selectedPdfPages');
+  for(const invalid of ['', '1,4','0','3-1','1,']) {
+    await h.draft(invalid);await h.apply();assert.equal(h.run('selectedPdfPages'),applied);
+    assert.equal(h.node('#pdfPageRange').value,invalid);assert.equal(h.node('#pdfPageRange')['aria-invalid'],'true');
+    assert.equal(h.node('#pdfPageRangeError').hidden,false);assert.equal(h.node('#exportPdfButton').disabled,false);
+  }
+  await h.draft('2');assert.equal(h.node('#pdfPageRange')['aria-invalid'],'false');await h.apply();
+  assert.equal(h.node('#pdfPageRangeError').hidden,true);assert.equal(h.run('JSON.stringify(getSelectedPdfPageIndexes())'),'[1]');
+});
+test('Enter applies range except during IME composition; rerenders preserve editable drafts',async()=>{
+  const h=pageHarness();await multi(h);await h.draft('2');h.run('renderPdfPageSelection(); updateExportState()');
+  assert.equal(h.node('#pdfPageRange').value,'2');let prevented=0;
+  await h.emit('#pdfPageRange','keydown',{key:'Enter',isComposing:true,preventDefault(){prevented++;}});
+  assert.equal(h.run('selectedPdfPages.size'),3);assert.equal(prevented,0);
+  await h.emit('#pdfPageRange','keydown',{key:'Enter',keyCode:229,preventDefault(){prevented++;}});
+  assert.equal(h.run('selectedPdfPages.size'),3);
+  await h.emit('#pdfPageRange','keydown',{key:'Enter',preventDefault(){prevented++;}});
+  assert.equal(h.run('JSON.stringify(getSelectedPdfPageIndexes())'),'[1]');assert.equal(prevented,1);
+});
+test('range selection and excluded-page preview remain independent',async()=>{
+  const h=pageHarness();await multi(h);
+  await h.emit('#pdfPageList','click',{target:h.preview(1)});
+  assert.equal(h.run('activePdfPageIndex'),1);
+  await h.draft('3,1');await h.apply();assert.equal(h.run('activePdfPageIndex'),1);
+  assert.equal(h.run('JSON.stringify(getSelectedPdfPageIndexes())'),'[0,2]');
+  await h.emit('#pdfPageList','click',{target:h.preview(1)});assert.equal(h.check(1).checked,false);
+  await h.change(2,false);assert.equal(h.run('JSON.stringify(getSelectedPdfPageIndexes())'),'[0]');
+  await h.emit('#clearPdfPages','click');assert.equal(h.node('#exportPdfButton').disabled,true);
+  await h.draft('1-3');await h.apply();assert.equal(h.node('#exportPdfButton').disabled,false);
+  await h.emit('#selectAllPdfPages','click');assert.equal(h.run('selectedPdfPages.size'),3);
+});
+test('range-selected export retains vectors, source ordering, maps, calibration and filename',async()=>{
+  const h=pageHarness();await multi(h);await h.draft('3,1,3');await h.apply();
+  h.run("state.includeAssemblyMap=true;state.calibrationEnabled=true;state.calibrationMeasuredX=98;state.calibrationMeasuredY=101");
+  h.node('#exportFilename').value='range/result.pdf';
+  const expected=await h.run('buildTiledPdf(pdfSource,[0,2],{includeAssemblyMap:true})');
+  await h.export();assert.equal(h.errors.length,0);assert.equal(h.downloads[0].filename,'range-result.pdf');
+  assert(h.downloads[0].bytes.equals(Buffer.from(expected)));
+  const text=h.downloads[0].bytes.toString();assert(text.includes('PAGE ONE VECTOR'));assert(!text.includes('PAGE TWO VECTOR'));assert(text.includes('PAGE THREE VECTOR'));
+  assert.equal((text.match(/\/Type \/Page\b/g)||[]).length,h.run('buildPdfExportPlan().totalOutputPages'));
+  h.context.outputFile={name:'output.pdf',type:'application/pdf',arrayBuffer:async()=>Uint8Array.from(h.downloads[0].bytes).buffer};
+  const parsed=await h.run('parsePdfSource(outputFile,sourceGeneration)');
+  // The selected plan retains source order regardless of input order.
+  assert.equal(h.run('JSON.stringify(buildPdfExportPlan().indexes)'),'[0,2]');
+  assert(parsed.pages.length>2);
+});
+test('source replacement, remove/Undo, reset, and failed reads clear range drafts and errors',async()=>{
+  const h=pageHarness();await multi(h);await h.draft('3,1');await h.apply();
+  h.node('#exportFilename').value='kept';h.run("exportFilenameBase='kept'");
+  await h.draft('0');await h.apply();h.remove();assert.equal(h.node('#pdfPageRange').value,'');
+  await h.undo();assert.equal(h.node('#pdfPageRange').value,'');assert.equal(h.node('#pdfPageRangeError').hidden,true);
+  assert.equal(h.run('JSON.stringify(getSelectedPdfPageIndexes())'),'[0,2]');assert.equal(h.node('#exportFilename').value,'kept');
+  await h.draft('2');await h.select(pdfFile());assert.equal(h.node('#pdfPageRange').value,'');
+  await multi(h);await h.draft('1,');await h.apply();const reset=h.confirmReset();reset.resolve(true);await reset.promise;
+  assert.equal(h.node('#pdfPageRange').value,'');assert.equal(h.node('#pdfPageRangeError').hidden,true);assert.equal(h.run('selectedFile'),null);
+  await multi(h);await h.draft('2');await h.select({...pdfFile(),arrayBuffer:async()=>new ArrayBuffer(0)});
+  assert.equal(h.node('#pdfPageRange').value,'');assert.equal(h.node('#applyPdfPageRange').disabled,true);
+});
+for(const outcome of ['success','cancel','failure'])test(`all page controls lock and ignored events resync after export ${outcome}`,async()=>{
+  const h=pageHarness();await multi(h);await h.draft('3,1');await h.apply();await h.draft('2');
+  const selected=h.run('selectedPdfPages'),active=h.run('activePdfPageIndex');
+  const gate=h.pause(),pending=h.export();await gate.entered.promise;
+  for(const id of ['pdfPageRange','applyPdfPageRange','selectAllPdfPages','clearPdfPages'])assert.equal(h.node('#'+id).disabled,true,id);
+  for(let i=0;i<3;i++){assert.equal(h.check(i).disabled,true);assert.equal(h.preview(i).disabled,true);}
+  await h.change(1,true);assert.equal(h.check(1).checked,false,'ignored change must immediately resync');
+  await h.draft('1-3');assert.equal(h.node('#pdfPageRange').value,'2');
+  await h.apply();await h.emit('#clearPdfPages','click');await h.emit('#selectAllPdfPages','click');
+  await h.emit('#pdfPageList','click',{target:h.preview(1)});
+  assert.equal(h.run('selectedPdfPages'),selected);assert.equal(h.run('activePdfPageIndex'),active);
+  h.check(1).checked=true; // DOM drift without a dispatched change is also repaired at completion.
+  if(outcome==='cancel')h.cancel();
+  if(outcome==='failure')gate.release.reject(new Error('synthetic export failure'));else gate.release.resolve();
+  await pending;assert.equal(h.check(1).checked,false);assert.equal(h.node('#pdfPageRange').value,'2');
+  for(const id of ['pdfPageRange','applyPdfPageRange','selectAllPdfPages','clearPdfPages'])assert.equal(h.node('#'+id).disabled,false,id);
+  for(let i=0;i<3;i++){assert.equal(h.check(i).disabled,false);assert.equal(h.preview(i).disabled,false);}
+  await h.apply();assert.equal(h.run('JSON.stringify(getSelectedPdfPageIndexes())'),'[1]');
+  await h.export();assert(h.downloads.at(-1).bytes.includes(Buffer.from('PAGE TWO VECTOR')));
+});
+test('range UI is labeled, locally described, localized and uses a shrinkable layout',()=>{
+  assert.match(html,/<label[^>]*for="pdfPageRange"/);
+  assert.match(html,/<input[^>]*id="pdfPageRange"[^>]*aria-describedby="pdfPageRangeHint pdfPageRangeError"/);
+  assert.match(html,/<p[^>]*id="pdfPageRangeError"[^>]*role="status"/);
+  for(const key of ['pdfPageRangeLabel','pdfPageRangeHint','pdfPageRangeApply','pdfPageRangeEmpty','pdfPageRangeInvalid','pdfPageRangeApplied','helpPageRange'])assert.equal((html.match(new RegExp(key+':','g'))||[]).length,2,key);
+  assert.match(html,/\.pdf-page-range-controls\s*\{[^}]*minmax\(0,\s*1fr\)/);
+  assert.equal((html.match(/\.pdf-page-range-controls\s*\{/g)||[]).length,1,'shared range styles must not be duplicated in mobile overrides');
+});
+test('repeated overlapping ranges expand each selected page only once',()=>{
+  const h=harness();h.run(sourceFunction('parsePdfPageRange'));
+  h.run('addCount=0; OriginalSet=Set; Set=class extends OriginalSet { add(value) { addCount++; return super.add(value); } };');
+  assert.equal(h.run("parsePdfPageRange('1-1000,1-1000,250-900,2',1000).length"),1000);
+  assert(h.run('addCount')<=1000,'duplicate ranges must not multiply expansion work');
 });

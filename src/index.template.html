@@ -277,6 +277,14 @@
     .pdf-page-selection-actions { display: flex; gap: 5px; flex-wrap: wrap; }
     .pdf-page-selection-actions .button { min-height: 31px; padding: 5px 8px; font-size: 9.5px; }
     .pdf-page-selection-note { margin: 5px 0 8px; color: var(--muted); font-size: 9.5px; line-height: 1.5; }
+    .pdf-page-range { margin-bottom: 10px; }
+    .pdf-page-range-label { display: block; margin-bottom: 5px; font-size: 10px; font-weight: 720; }
+    .pdf-page-range-controls { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px; }
+    .pdf-page-range-input { min-width: 0; width: 100%; padding: 7px 9px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--text); font: inherit; font-size: 12px; }
+    .pdf-page-range-input:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+    .pdf-page-range-input[aria-invalid="true"] { border-color: var(--danger); }
+    .pdf-page-range-input:disabled, .pdf-page-preview-button:disabled { opacity: .6; cursor: not-allowed; }
+    .pdf-page-range-error { margin: 4px 0 0; color: var(--danger); font-size: 10px; line-height: 1.5; }
     .pdf-page-list { display: grid; gap: 5px; max-height: 230px; overflow: auto; padding-right: 2px; }
     .pdf-page-row { display: grid; grid-template-columns: auto minmax(0,1fr); align-items: stretch; min-width: 0; border: 1px solid var(--line); border-radius: 9px; background: var(--surface); overflow: hidden; }
     .pdf-page-row[data-active="true"] { border-color: var(--accent); box-shadow: inset 3px 0 0 var(--accent); }
@@ -787,6 +795,15 @@
                 <div class="pdf-page-selection-actions"><button class="button ghost" id="selectAllPdfPages" type="button" data-i18n="selectAllPages">すべて選択</button><button class="button ghost" id="clearPdfPages" type="button" data-i18n="clearPages">すべて解除</button></div>
               </div>
               <p class="pdf-page-selection-note" data-i18n="pdfOutputPagesNote">チェックしたページだけを出力します。ページ名を押すと右側のプレビュー対象を切り替えます。</p>
+              <div class="pdf-page-range">
+                <label class="pdf-page-range-label" for="pdfPageRange" data-i18n="pdfPageRangeLabel">ページ範囲で選択</label>
+                <div class="pdf-page-range-controls">
+                  <input class="pdf-page-range-input" id="pdfPageRange" type="text" placeholder="1-3, 5" autocomplete="off" spellcheck="false" aria-describedby="pdfPageRangeHint pdfPageRangeError" aria-invalid="false">
+                  <button class="button" id="applyPdfPageRange" type="button" data-i18n="pdfPageRangeApply">適用</button>
+                </div>
+                <p class="pdf-page-selection-note" id="pdfPageRangeHint" data-i18n="pdfPageRangeHint">例: 1-3, 5。半角の数字・カンマ・ハイフンで指定し、適用すると選択を置き換えます。</p>
+                <p class="pdf-page-range-error" id="pdfPageRangeError" role="status" hidden></p>
+              </div>
               <div class="pdf-page-list" id="pdfPageList"></div>
             </div>
             <div class="image-meta" id="imageMeta" hidden>
@@ -981,7 +998,8 @@
       <!-- APP:HELP:BEGIN -->
       <h3 data-i18n="helpBasicsTitle">基本操作</h3>
       <ol><li data-i18n="helpStep1">PDFはCropBox / MediaBoxと回転、画像はピクセル数と解像度情報、SVGはwidth / height / viewBoxを読み取ります。</li><li data-i18n="helpStep2">完成サイズの指定方法、用紙、向き、プリンター余白、重なりを設定します。</li><li data-i18n="helpStep3">右側のプレビューで分割位置・必要枚数・画像の実効解像度を確認し、分割PDFを保存できます。</li></ol>
-      <p data-i18n="helpSourceLifecycle">生成中はファイルの選択・削除を一時停止します。読み込み中に削除したファイルも「元に戻す」で再読み込みできます。</p>
+      <p data-i18n="helpSourceLifecycle">生成中はファイルの選択・削除とページの選択・切り替えを一時停止します。読み込み中に削除したファイルも「元に戻す」で再読み込みできます。</p>
+      <p data-i18n="helpPageRange">ページ範囲（例: 1-3, 5）を入力し「適用」またはEnterで出力ページの選択を置き換えます。重複はまとめ、元のページ順に出力します。入力だけでは選択は変わらず、不正な範囲も選択を変更しません。適用後、ファイル変更、リセット、元に戻す操作で入力欄を空にします。</p>
       <h3 data-i18n="helpPrivacyTitle">プライバシー</h3>
       <p data-i18n="helpPrivacyBody">選択したファイルと設定はブラウザー内で扱われ、このアプリから外部サーバーへ送信されません。設定値だけを端末内へ保存する場合があります。</p>
       <h3 data-i18n="helpNotesTitle">このバージョンの範囲</h3>
@@ -1076,6 +1094,7 @@
         ja: {
           brandMeta: '実寸分割・完全ローカル処理', helpTitle: '使い方と注意事項', close: '閉じる',
           introTitle: '大きなPDF・画像を、普通の用紙へ分割', lead: '完成サイズ、プリンター余白、重なりを確認しながら、貼り合わせに必要な用紙枚数を計算します。', localBadge: '完全ローカル処理',
+          pdfPageRangeLabel: 'ページ範囲で選択', pdfPageRangeApply: '適用', pdfPageRangeHint: '例: 1-3, 5。半角の数字・カンマ・ハイフンで指定し、適用すると選択を置き換えます。', pdfPageRangeEmpty: 'ページ範囲を入力してください。すべて外す場合は「すべて解除」を使います。', pdfPageRangeInvalid: '1〜{count}のページ番号を指定してください（例: 1-3, 5）。空の項目や逆順の範囲は使えません。選択は変更されていません。', pdfPageRangeApplied: '{count}ページを選択しました。',
           step1: 'STEP 1', sourceTitle: 'ファイルと元サイズ', sourceLead: 'PDFは実寸、画像はピクセル数と解像度情報、SVGは寸法指定を自動で読み取ります。', dropTitle: 'PDF・画像・SVGを選択', dropBody: 'ここにドロップ、またはクリックして選択', removeFile: 'ファイルを外す', sourceNote: 'PDF・画像・SVGの寸法情報を端末内で読み取ります。物理サイズがない画像は完成サイズを指定してください。', sourceWidth: '元の幅', sourceHeight: '元の高さ', pdfPages: 'PDFページ', pdfBox: '使用するページ領域', pdfRotation: 'ページ回転', pdfUserUnit: 'PDF単位', pdfOutputPages: '出力ページ', pdfOutputPagesNote: 'チェックしたページだけを出力します。ページ名を押すと右側のプレビュー対象を切り替えます。', selectAllPages: 'すべて選択', clearPages: 'すべて解除', pdfPageLabel: 'P{page}', pdfPageMeta: '{width} × {height} mm · {cols}列 × {rows}行 · {count}枚', imagePixels: '画像サイズ', imagePhysical: '物理サイズ', imagePpi: '実効解像度', imageOutput: 'PDF出力',
           step2: 'STEP 2', sizeTitle: '完成サイズ', sizeLead: '原寸・任意サイズ・用紙枚数から選べます。', sizeModeLabel: 'サイズ指定方法', modeOriginal: '元のサイズを維持', modeOriginalBody: '元データの物理寸法をそのまま使います。', modeFinished: '完成サイズを指定', modeFinishedBody: '仕上がりの幅と高さを直接指定します。', modeSheets: '用紙枚数を指定', modeSheetsBody: '横×縦の枚数から最大完成サイズを計算します。', finishedWidth: '完成幅', finishedHeight: '完成高さ', lockAspect: '縦横比を固定', sheetCols: '横', sheetRows: '縦', sheetsUnit: '枚',
           step3: 'STEP 3', paperTitle: '用紙と貼り合わせ', paperLead: '紙の端ではなく、実際に印刷できる範囲で計算します。', paperSize: '用紙サイズ', orientation: '向き', portrait: '縦', landscape: '横', margin: 'プリンター余白', overlap: '重なり', calibrationTitle: 'プリンター校正', calibrationBody: '100 mmの基準線を印刷して実測値を入力すると、プリンターのX/Y方向の縮尺誤差を補正します。', downloadCalibration: '100 mm校正PDFを保存', calibrationPrintNote: '校正PDFは「100% / 実際のサイズ」で印刷し、「ページに合わせる」などの自動拡大縮小をOFFにしてください。', calibrationMeasuredX: '横100 mm線の実測値', calibrationMeasuredY: '縦100 mm線の実測値', calibrationEnabled: '補正を分割PDFへ適用', calibrationScale: '補正 X {x}% · Y {y}%', calibrationDownloaded: '100 mm校正PDFを保存しました。', assemblyAssist: '貼り合わせ補助', assemblyAssistBody: '右辺・下辺の切り取り位置を基準に、重なり部分を合わせやすくします。', trimLines: '切り取り線', registrationMarks: '位置合わせマーク', tileLabels: 'ページID', reset: '初期設定に戻す',
@@ -1083,12 +1102,13 @@
           summaryFinished: '完成サイズ', summaryPaper: '用紙', summaryGrid: '分割', summarySheets: '必要枚数', summarySheetsSub: '余白・重なりを考慮', summarySheetsMulti: '{page} · 選択 {selected} / {total}ページ · タイル合計 {count}枚', printable: '印刷可能', printableCalibrated: '補正後の実効範囲', rowsCols: '{cols}列 × {rows}行', sheetsCount: '{count}枚', overlapValue: '重なり {value} mm', legendTile: '用紙範囲', legendOverlap: '重なり', legendTrim: '切り取り位置',
           modeSummaryOriginal: '元サイズ', modeSummaryFinished: '指定サイズ', modeSummarySheets: '枚数から算出', calcNote: '分割数は「印刷可能範囲 − 重なり」を次の用紙へ進む幅として計算します。', exportBody: 'PDFはベクターを保ったまま、画像は元ピクセルを保ったまま分割PDFを生成します。複数ページPDFではチェックしたページだけを順番に出力します。', exportFilename: '保存ファイル名', exportPdf: '分割PDFを保存', exportReady: '分割して保存できます。', exportNeedPdf: '対応ファイルを選ぶと分割PDFを保存できます。', exportNeedPages: '出力するPDFページを1ページ以上選択してください。', exportWorking: '分割PDFを生成しています…', exportProgress: '{done} / {total} ページを準備', cancelExport: '生成をキャンセル', exportCancelling: '生成をキャンセルしています…', exportCancelled: 'PDF生成をキャンセルしました。', exportDone: '{count}ページの分割PDFを保存しました。', imageReading: '画像を読み取っています…', imageReadDone: '画像情報を読み取りました。', imageReadError: 'この画像を読み取れませんでした。別のファイルで試してください。', imageNoPhysical: 'この画像には印刷サイズの情報がありません。完成サイズを指定してください。', imagePhysicalMetadata: '埋め込み解像度から算出', imagePhysicalCss: 'CSS 96 px/in 基準', imagePhysicalUnknown: '情報なし', imageOutputRaster: '元ピクセルを維持', imageOutputSvgRaster: 'SVGを画像化', ppiHigh: '高精細', ppiPrint: '印刷向け', ppiPoster: '大型掲示向け', ppiLow: '粗く見える可能性', ppiVector: 'ベクター入力', pdfReading: 'PDFを読み取っています…', pdfReadDone: 'PDFの{count}ページを読み取りました。', pdfReadError: 'このPDFは現在の読み取り方式では解析できませんでした。別のPDFで試してください。', pdfEncrypted: '暗号化・パスワード保護されたPDFにはこのバージョンでは対応していません。', pdfUnsupportedContents: 'このPDFのページ内容は現在の分割出力方式では扱えません。', pdfExportError: '分割PDFを生成できませんでした。',
           errorPositiveSize: '幅と高さは0より大きい値にしてください。', errorMargin: 'プリンター余白が大きすぎて印刷可能範囲がなくなっています。', errorOverlap: '重なりは印刷可能な幅・高さより小さくしてください。', errorSheets: '用紙枚数は1以上の整数にしてください。', warningManySheets: 'この設定では{count}枚必要です。入力値を確認してください。',
-          helpBasicsTitle: '基本操作', helpStep1: 'PDFは各ページのCropBox / MediaBoxと回転を読み取り、出力するページを選択できます。画像はピクセル数と解像度情報、SVGはwidth / height / viewBoxを読み取ります。', helpStep2: '完成サイズの指定方法、用紙、向き、プリンター余白、重なりを設定します。', helpStep3: '右側のプレビューでページごとの分割位置・必要枚数を確認し、進捗を見ながら分割PDFを保存できます。', helpSourceLifecycle: '生成中はファイルの選択・削除を一時停止します。読み込み中に削除したファイルも「元に戻す」で再読み込みできます。', helpPrivacyTitle: 'プライバシー', helpPrivacyBody: '選択したファイルと設定はブラウザー内で扱われ、このアプリから外部サーバーへ送信されません。設定値だけを端末内へ保存する場合があります。', helpNotesTitle: 'このバージョンの範囲', helpNoteMilestone: 'v1.0.0は初回正式版です。PDF・画像・SVGの分割、プリンター校正、個別プレビュー、スマホ操作、保存・キャンセル、完全ローカル処理をまとめて回帰確認しています。個別プレビューは背景クリックでも閉じられます。', helpNotePrint: '校正時も本番印刷時も、プリンタードライバーやPDFビューアー側の「ページに合わせる」等をOFFにし、100% / 実際のサイズで印刷してください。', helpNoteBrowser: '大きなファイル処理はブラウザーや端末のメモリ制限を受けます。ファイルの内容や端末の空きメモリによっては処理できない場合があります。', helpOffline: '配布用HTMLは単体で開ける構成を維持し、実行時の外部通信を行いません。',
+          helpPageRange: 'ページ範囲（例: 1-3, 5）を入力し「適用」またはEnterで出力ページの選択を置き換えます。重複はまとめ、元のページ順に出力します。入力だけでは選択は変わらず、不正な範囲も選択を変更しません。適用後、ファイル変更、リセット、元に戻す操作で入力欄を空にします。', helpBasicsTitle: '基本操作', helpStep1: 'PDFは各ページのCropBox / MediaBoxと回転を読み取り、出力するページを選択できます。画像はピクセル数と解像度情報、SVGはwidth / height / viewBoxを読み取ります。', helpStep2: '完成サイズの指定方法、用紙、向き、プリンター余白、重なりを設定します。', helpStep3: '右側のプレビューでページごとの分割位置・必要枚数を確認し、進捗を見ながら分割PDFを保存できます。', helpSourceLifecycle: '生成中はファイルの選択・削除とページの選択・切り替えを一時停止します。読み込み中に削除したファイルも「元に戻す」で再読み込みできます。', helpPrivacyTitle: 'プライバシー', helpPrivacyBody: '選択したファイルと設定はブラウザー内で扱われ、このアプリから外部サーバーへ送信されません。設定値だけを端末内へ保存する場合があります。', helpNotesTitle: 'このバージョンの範囲', helpNoteMilestone: 'v1.0.0は初回正式版です。PDF・画像・SVGの分割、プリンター校正、個別プレビュー、スマホ操作、保存・キャンセル、完全ローカル処理をまとめて回帰確認しています。個別プレビューは背景クリックでも閉じられます。', helpNotePrint: '校正時も本番印刷時も、プリンタードライバーやPDFビューアー側の「ページに合わせる」等をOFFにし、100% / 実際のサイズで印刷してください。', helpNoteBrowser: '大きなファイル処理はブラウザーや端末のメモリ制限を受けます。ファイルの内容や端末の空きメモリによっては処理できない場合があります。', helpOffline: '配布用HTMLは単体で開ける構成を維持し、実行時の外部通信を行いません。',
           buildInfo: 'ビルド情報', appVersion: 'アプリバージョン', builtAt: '生成日時', dependencies: '内包依存数', footer: '単一HTML・実行時外部通信なし', confirmTitle: '確認', confirmAction: '実行する', cancel: 'キャンセル', resetTitle: '初期設定に戻しますか？', resetMessage: '選択したファイルを外し、寸法と用紙設定を初期状態へ戻します。', resetConfirm: '初期設定に戻す', resetDone: '初期設定に戻しました', fileSelected: 'ファイルを選択しました。', unsupportedFile: 'この形式は選択できません。PDF / PNG / JPEG / WebP / SVGを選んでください。', fileRemoved: 'ファイルを外しました', undo: '元に戻す', fileRestored: 'ファイルを戻しました', mobilePreview: 'プレビューを見る', mobileSave: 'PDF保存', mobileCancel: 'キャンセル', mobileSummary: '{count}枚 · {paper}', mobileProgress: '{done}/{total}ページ生成中'
         },
         en: {
           brandMeta: 'Physical-size tiling · Fully local', helpTitle: 'How to use & notes', close: 'Close',
           introTitle: 'Split large PDFs and images across ordinary paper', lead: 'Check the finished size, printer margins, and overlap while calculating how many sheets are needed for assembly.', localBadge: 'Fully local processing',
+          pdfPageRangeLabel: 'Select by page range', pdfPageRangeApply: 'Apply', pdfPageRangeHint: 'Example: 1-3, 5. Use ASCII digits, commas and hyphens. Apply replaces the selection.', pdfPageRangeEmpty: 'Enter a page range. Use Clear all to deselect every page.', pdfPageRangeInvalid: 'Use page numbers from 1 to {count} (for example, 1-3, 5), with no empty items or reversed ranges. The selection is unchanged.', pdfPageRangeApplied: '{count} pages selected.',
           step1: 'STEP 1', sourceTitle: 'File & source size', sourceLead: 'PDF physical size, image pixels/resolution metadata, and SVG dimensions are read automatically.', dropTitle: 'Choose PDF, image, or SVG', dropBody: 'Drop a file here, or click to choose', removeFile: 'Remove file', sourceNote: 'PDF, image, and SVG dimensions are read locally. Images without physical-size metadata should use an explicit finished size.', sourceWidth: 'Source width', sourceHeight: 'Source height', pdfPages: 'PDF pages', pdfBox: 'Page area used', pdfRotation: 'Page rotation', pdfUserUnit: 'PDF unit', pdfOutputPages: 'Output pages', pdfOutputPagesNote: 'Only checked pages are exported. Select a page name to switch the preview on the right.', selectAllPages: 'Select all', clearPages: 'Clear all', pdfPageLabel: 'P{page}', pdfPageMeta: '{width} × {height} mm · {cols} cols × {rows} rows · {count} sheets', imagePixels: 'Image size', imagePhysical: 'Physical size', imagePpi: 'Effective resolution', imageOutput: 'PDF output',
           step2: 'STEP 2', sizeTitle: 'Finished size', sizeLead: 'Use source size, an explicit size, or a sheet count.', sizeModeLabel: 'Size mode', modeOriginal: 'Keep source size', modeOriginalBody: 'Use the source document physical dimensions as-is.', modeFinished: 'Set finished size', modeFinishedBody: 'Enter the final width and height directly.', modeSheets: 'Set sheet count', modeSheetsBody: 'Derive the maximum finished size from columns × rows.', finishedWidth: 'Finished width', finishedHeight: 'Finished height', lockAspect: 'Lock aspect ratio', sheetCols: 'Across', sheetRows: 'Down', sheetsUnit: 'sheets',
           step3: 'STEP 3', paperTitle: 'Paper & assembly', paperLead: 'Calculate from the printable area instead of assuming edge-to-edge printing.', paperSize: 'Paper size', orientation: 'Orientation', portrait: 'Portrait', landscape: 'Landscape', margin: 'Printer margin', overlap: 'Overlap', calibrationTitle: 'Printer calibration', calibrationBody: 'Print a 100 mm reference and enter the measured X/Y lengths to compensate for printer scaling error.', downloadCalibration: 'Save 100 mm calibration PDF', calibrationPrintNote: 'Print the calibration PDF at “100% / Actual size” and turn off options such as “Fit to page”.', calibrationMeasuredX: 'Measured horizontal 100 mm line', calibrationMeasuredY: 'Measured vertical 100 mm line', calibrationEnabled: 'Apply correction to tiled PDF', calibrationScale: 'Correction X {x}% · Y {y}%', calibrationDownloaded: 'Saved the 100 mm calibration PDF.', assemblyAssist: 'Assembly aids', assemblyAssistBody: 'Use right/bottom trim positions to make overlapping sheets easier to align.', trimLines: 'Trim lines', registrationMarks: 'Registration marks', tileLabels: 'Page IDs', reset: 'Reset settings',
@@ -1096,7 +1116,7 @@
           summaryFinished: 'Finished size', summaryPaper: 'Paper', summaryGrid: 'Grid', summarySheets: 'Sheets needed', summarySheetsSub: 'Includes margins & overlap', summarySheetsMulti: '{page} · {selected} / {total} pages selected · {count} tile sheets total', printable: 'Printable', printableCalibrated: 'Effective after correction', rowsCols: '{cols} cols × {rows} rows', sheetsCount: '{count} sheets', overlapValue: '{value} mm overlap', legendTile: 'Sheet coverage', legendOverlap: 'Overlap', legendTrim: 'Trim position',
           modeSummaryOriginal: 'Source size', modeSummaryFinished: 'Explicit size', modeSummarySheets: 'Derived from sheets', calcNote: 'Tile count advances each next sheet by “printable area − overlap”.', exportBody: 'PDFs keep vector content, while raster images keep their source pixels. For multi-page PDFs, only checked source pages are exported in order.', exportFilename: 'Save filename', exportPdf: 'Save tiled PDF', exportReady: 'Ready to split and save.', exportNeedPdf: 'Choose a supported file to enable tiled PDF export.', exportNeedPages: 'Select at least one PDF page to export.', exportWorking: 'Generating tiled PDF…', exportProgress: 'Preparing page {done} / {total}', cancelExport: 'Cancel generation', exportCancelling: 'Cancelling generation…', exportCancelled: 'PDF generation cancelled.', exportDone: 'Saved a {count}-page tiled PDF.', imageReading: 'Reading image…', imageReadDone: 'Read image information.', imageReadError: 'This image could not be read. Try another file.', imageNoPhysical: 'This image has no physical-size metadata. Set the finished size explicitly.', imagePhysicalMetadata: 'From embedded resolution', imagePhysicalCss: 'CSS 96 px/in basis', imagePhysicalUnknown: 'Not available', imageOutputRaster: 'Source pixels preserved', imageOutputSvgRaster: 'SVG rasterized', ppiHigh: 'High detail', ppiPrint: 'Print-ready', ppiPoster: 'Large-display range', ppiLow: 'May look coarse', ppiVector: 'Vector source', pdfReading: 'Reading PDF…', pdfReadDone: 'Read {count} PDF pages.', pdfReadError: 'This PDF could not be parsed by the current reader. Try another PDF.', pdfEncrypted: 'Encrypted or password-protected PDFs are not supported in this version.', pdfUnsupportedContents: 'This page content cannot be handled by the current tile-export method.', pdfExportError: 'Could not generate the tiled PDF.',
           errorPositiveSize: 'Width and height must be greater than zero.', errorMargin: 'The printer margin leaves no printable area.', errorOverlap: 'Overlap must be smaller than both printable dimensions.', errorSheets: 'Sheet counts must be integers of 1 or more.', warningManySheets: 'This setup needs {count} sheets. Check the input values.',
-          helpBasicsTitle: 'Basics', helpStep1: 'PDF reads CropBox / MediaBox and rotation for each page, and lets you choose which pages to export. Images read pixel/resolution metadata; SVG reads width / height / viewBox.', helpStep2: 'Choose the sizing mode, paper, orientation, printer margin, and overlap.', helpStep3: 'Use the preview to check per-page tile positions and sheet counts, then save the tiled PDF while following export progress.', helpSourceLifecycle: 'File selection and removal pause during export. Undo re-reads a file that was removed before loading finished.', helpPrivacyTitle: 'Privacy', helpPrivacyBody: 'Selected files and settings are handled in the browser and are not sent to an external server by this app. Only setting values may be stored locally.', helpNotesTitle: 'Scope of this version', helpNoteMilestone: 'v1.0.0 is the initial stable release. PDF/image/SVG tiling, printer calibration, individual previews, mobile controls, save/cancel flows, and fully local processing are covered by the release regression. Sheet Preview can also be closed by clicking its backdrop.', helpNotePrint: 'For both calibration and final printing, disable “Fit to page” or similar scaling and print at 100% / Actual size.', helpNoteBrowser: 'Large-file processing is subject to browser/device memory limits. Some files may not complete depending on their contents and the memory available on the device.', helpOffline: 'The distributed HTML remains directly openable and performs no runtime external network request.',
+          helpPageRange: 'Enter a page range (for example, 1-3, 5) and choose Apply or press Enter to replace the output selection. Duplicates export once in source order. Typing or an invalid range leaves the selection unchanged. Applying a range, changing the source, Reset, and Undo clear the draft.', helpBasicsTitle: 'Basics', helpStep1: 'PDF reads CropBox / MediaBox and rotation for each page, and lets you choose which pages to export. Images read pixel/resolution metadata; SVG reads width / height / viewBox.', helpStep2: 'Choose the sizing mode, paper, orientation, printer margin, and overlap.', helpStep3: 'Use the preview to check per-page tile positions and sheet counts, then save the tiled PDF while following export progress.', helpSourceLifecycle: 'File selection/removal and page selection/preview controls pause during export. Undo re-reads a file that was removed before loading finished.', helpPrivacyTitle: 'Privacy', helpPrivacyBody: 'Selected files and settings are handled in the browser and are not sent to an external server by this app. Only setting values may be stored locally.', helpNotesTitle: 'Scope of this version', helpNoteMilestone: 'v1.0.0 is the initial stable release. PDF/image/SVG tiling, printer calibration, individual previews, mobile controls, save/cancel flows, and fully local processing are covered by the release regression. Sheet Preview can also be closed by clicking its backdrop.', helpNotePrint: 'For both calibration and final printing, disable “Fit to page” or similar scaling and print at 100% / Actual size.', helpNoteBrowser: 'Large-file processing is subject to browser/device memory limits. Some files may not complete depending on their contents and the memory available on the device.', helpOffline: 'The distributed HTML remains directly openable and performs no runtime external network request.',
           buildInfo: 'Build information', appVersion: 'App version', builtAt: 'Built at', dependencies: 'Embedded dependencies', footer: 'Single HTML · No runtime network', confirmTitle: 'Confirm', confirmAction: 'Continue', cancel: 'Cancel', resetTitle: 'Reset settings?', resetMessage: 'Remove the selected file and restore the default document, paper, margin, and overlap values.', resetConfirm: 'Reset', resetDone: 'Settings reset', fileSelected: 'File selected.', unsupportedFile: 'Unsupported file type. Choose PDF, PNG, JPEG, WebP, or SVG.', fileRemoved: 'File removed', undo: 'Undo', fileRestored: 'File restored', mobilePreview: 'View preview', mobileSave: 'Save PDF', mobileCancel: 'Cancel', mobileSummary: '{count} sheets · {paper}', mobileProgress: 'Generating {done}/{total}'
         }
       };
@@ -1118,6 +1138,8 @@
       let pdfJsInitPromise = null;
       let pdfJsWorkerUrl = null;
       let selectedPdfPages = new Set();
+      let pdfPageRangeDraft = '';
+      let pdfPageRangeError = '';
       let activePdfPageIndex = 0;
       let exportFilenameBase = `${APP_CONFIG.slug}-tiled`;
       let exportInProgress = false;
@@ -1551,6 +1573,58 @@
         svg.append(svgElement('path',{d:`M${ox+w/2} ${oy-12} l-6 9 h12 z`,fill:'#16624f'}));
       }
 
+      function parsePdfPageRange(text, pageCount) {
+        if (!String(text).trim()) throw new Error('pdfPageRangeEmpty');
+        if (!Number.isSafeInteger(pageCount) || pageCount < 1) throw new Error('pdfPageRangeInvalid');
+        // Validate every endpoint before expansion, including later invalid tokens.
+        const ranges = String(text).split(',').map(token => {
+          const match = /^\s*([0-9]+)\s*(?:-\s*([0-9]+)\s*)?$/.exec(token);
+          if (!match) throw new Error('pdfPageRangeInvalid');
+          const start = Number(match[1]), end = Number(match[2] ?? match[1]);
+          if (!Number.isSafeInteger(start) || !Number.isSafeInteger(end) || start < 1 || end < start || end > pageCount) throw new Error('pdfPageRangeInvalid');
+          return [start, end];
+        });
+        const indexes = new Set();
+        let previousEnd = 0;
+        // Sorted overlapping ranges must not repeatedly expand the same pages.
+        for (const [start, end] of ranges.sort((a, b) => a[0] - b[0])) {
+          for (let page = Math.max(start, previousEnd + 1); page <= end; page += 1) indexes.add(page - 1);
+          previousEnd = Math.max(previousEnd, end);
+        }
+        return [...indexes];
+      }
+      function clearPdfPageRange() {
+        pdfPageRangeDraft = '';
+        pdfPageRangeError = '';
+      }
+      function syncPdfPageControls() {
+        const locked = exportInProgress || !pdfSource?.pages?.length || !selectedFile || !isPdfFile(selectedFile);
+        for (const id of ['pdfPageRange', 'applyPdfPageRange', 'selectAllPdfPages', 'clearPdfPages']) $(`#${id}`).disabled = locked;
+        const input = $('#pdfPageRange'), error = $('#pdfPageRangeError');
+        if (input.value !== pdfPageRangeDraft) input.value = pdfPageRangeDraft;
+        input.setAttribute('aria-invalid', pdfPageRangeError ? 'true' : 'false');
+        error.textContent = pdfPageRangeError ? translate(pdfPageRangeError, { count: pdfSource?.pages?.length || 0 }) : '';
+        error.hidden = !pdfPageRangeError;
+        // Resync existing nodes without replacing the focused control.
+        $('#pdfPageList').querySelectorAll('[data-pdf-page-index]').forEach(row => {
+          const index = Number(row.dataset.pdfPageIndex), check = row.querySelector('input[type="checkbox"]');
+          const preview = row.querySelector('[data-preview-pdf-page]');
+          row.dataset.included = selectedPdfPages.has(index) ? 'true' : 'false';
+          if (check) { check.disabled = locked; check.checked = selectedPdfPages.has(index); }
+          if (preview) preview.disabled = locked;
+        });
+      }
+      function applyPdfPageRange() {
+        if (exportInProgress || !pdfSource?.pages?.length) { syncPdfPageControls(); return; }
+        let indexes;
+        try { indexes = parsePdfPageRange(pdfPageRangeDraft, pdfSource.pages.length); }
+        catch (error) { pdfPageRangeError = error.message; syncPdfPageControls(); return; }
+        selectedPdfPages = new Set(indexes);
+        clearPdfPageRange();
+        update({ save: false });
+        showToast(translate('pdfPageRangeApplied', { count: indexes.length }), { tone: 'success' });
+      }
+
       function renderPdfPageSelection() {
         const root = $('#pdfPageSelection');
         const list = $('#pdfPageList');
@@ -1558,6 +1632,7 @@
           root.hidden = true;
           list.replaceChildren();
           $('#pdfSelectedPagesValue').textContent = '—';
+          syncPdfPageControls();
           return;
         }
         root.hidden = pdfSource.pages.length <= 1;
@@ -1596,6 +1671,7 @@
           row.append(check, preview);
           list.append(row);
         });
+        syncPdfPageControls();
       }
 
       let activeTile = null;
@@ -2565,6 +2641,7 @@ Q
         $('#exportFilename').disabled = exportInProgress;
         $('#sourceFile').disabled = exportInProgress;
         $('#removeFileButton').disabled = exportInProgress;
+        syncPdfPageControls();
         const lockSource = Boolean(pdfSource || imageSource?.physicalKnown);
         for (const id of ['sourceWidth', 'sourceHeight', 'finishedWidth', 'finishedHeight', 'sheetCols', 'sheetRows', 'margin', 'overlap', 'calibrationMeasuredX', 'calibrationMeasuredY']) {
           $(`#${id}`).disabled = exportInProgress || (lockSource && (id === 'sourceWidth' || id === 'sourceHeight'));
@@ -2615,6 +2692,7 @@ Q
         if (!file) return;
         if (!isSupportedFile(file)) { $('#sourceFile').value = ''; showToast(translate('unsupportedFile'), { tone: 'warning' }); return; }
         invalidateExport();
+        clearPdfPageRange();
         selectedFile=file; pdfSource=null; imageSource=null; selectedPdfPages=new Set(); activePdfPageIndex=0; clearSourcePreview(); resetExportProgress(); setDefaultExportFilename(file); if (filenameBase !== null) { exportFilenameBase=sanitizeFilenameBase(filenameBase); $('#exportFilename').value=exportFilenameBase; } sourceGeneration+=1; const generation=sourceGeneration; renderSelectedFile(); showToast(translate('fileSelected'));
         if (isPdfFile(file)) {
           $('#sourceNote').textContent=translate('pdfReading'); $('#exportStatus').textContent=translate('pdfReading');
@@ -2647,6 +2725,7 @@ Q
         const removedPages=new Set(selectedPdfPages), removedActive=activePdfPageIndex, removedFilename=exportFilenameBase;
         const generationAfterRemove=sourceGeneration+1;
         invalidateExport();
+        clearPdfPageRange();
         selectedFile=null; pdfSource=null; imageSource=null; selectedPdfPages=new Set(); activePdfPageIndex=0; exportFilenameBase=`${APP_CONFIG.slug}-tiled`; $('#exportFilename').value=exportFilenameBase; clearSourcePreview(); resetExportProgress(); sourceGeneration=generationAfterRemove; $('#sourceFile').value=''; $('#sourceNote').textContent=translate('sourceNote'); renderSelectedFile(); renderDynamic();
         showToast(translate('fileRemoved'), { actionLabel:translate('undo'), duration:5000, onAction:async()=>{
           if (sourceGeneration!==generationAfterRemove) return;
@@ -2657,6 +2736,7 @@ Q
             if (sourceGeneration === restoredGeneration && (pdfSource || imageSource)) showToast(translate('fileRestored'));
             return;
           }
+          clearPdfPageRange();
           selectedFile=removed; pdfSource=removedPdf; imageSource=removedImage; selectedPdfPages=new Set(removedPages); activePdfPageIndex=removedActive; exportFilenameBase=removedFilename; $('#exportFilename').value=exportFilenameBase; sourceGeneration+=1; if (imageSource) sourcePreviewUrl=URL.createObjectURL(removed); renderSelectedFile();
           if (pdfSource) { const page=getActivePdfPage() || pdfSource.pages[0]; state.sourceWidth=Number(page.widthMm.toFixed(4)); state.sourceHeight=Number(page.heightMm.toFixed(4)); } else if (imageSource) applyParsedSourceSize(imageSource); update(); showToast(translate('fileRestored'));
         }});
@@ -2696,16 +2776,17 @@ Q
       $('#removeFileButton').addEventListener('click', () => { if (!exportInProgress) removeFile(); });
 
       $('#pdfPageList').addEventListener('change', event => {
-        if (exportInProgress) return;
+        if (exportInProgress) { syncPdfPageControls(); return; }
         const input = event.target.closest?.('input[type="checkbox"]');
         const row = input?.closest?.('[data-pdf-page-index]');
         if (!input || !row) return;
         const index = Number(row.dataset.pdfPageIndex);
+        if (!Number.isInteger(index) || !pdfSource?.pages[index]) return;
         if (input.checked) selectedPdfPages.add(index); else selectedPdfPages.delete(index);
         update({ save:false });
       });
       $('#pdfPageList').addEventListener('click', event => {
-        if (exportInProgress) return;
+        if (exportInProgress) { syncPdfPageControls(); return; }
         const button = event.target.closest?.('[data-preview-pdf-page]');
         if (!button || !pdfSource) return;
         const index = Number(button.dataset.previewPdfPage);
@@ -2716,15 +2797,28 @@ Q
         renderSelectedFile(); update({ save:false });
       });
       $('#selectAllPdfPages').addEventListener('click', () => {
-        if (exportInProgress || !pdfSource) return;
+        if (exportInProgress || !pdfSource) { syncPdfPageControls(); return; }
         selectedPdfPages = new Set(pdfSource.pages.map((_,index)=>index));
         update({ save:false });
       });
       $('#clearPdfPages').addEventListener('click', () => {
-        if (exportInProgress) return;
+        if (exportInProgress) { syncPdfPageControls(); return; }
         selectedPdfPages = new Set();
         update({ save:false });
       });
+
+      $('#pdfPageRange').addEventListener('input', event => {
+        if (exportInProgress || !pdfSource) { syncPdfPageControls(); return; }
+        pdfPageRangeDraft = event.target.value;
+        pdfPageRangeError = '';
+        syncPdfPageControls();
+      });
+      $('#pdfPageRange').addEventListener('keydown', event => {
+        if (event.key !== 'Enter' || event.isComposing || event.keyCode === 229) return;
+        event.preventDefault();
+        applyPdfPageRange();
+      });
+      $('#applyPdfPageRange').addEventListener('click', applyPdfPageRange);
 
       $('#sourceWidth').addEventListener('change', event => setNumericState('sourceWidth', event.target, { min: 1 }));
       $('#sourceHeight').addEventListener('change', event => setNumericState('sourceHeight', event.target, { min: 1 }));
@@ -2829,6 +2923,7 @@ Q
         const ok = await AppConfirm.ask({ title: translate('resetTitle'), message: translate('resetMessage'), confirmLabel: translate('resetConfirm'), cancelLabel: translate('cancel') });
         if (!ok || exportInProgress || generation !== sourceGeneration || previousExport !== exportSequence) return;
         invalidateExport();
+        clearPdfPageRange();
         state = { ...defaultState }; selectedFile = null; pdfSource = null; imageSource = null; selectedPdfPages=new Set(); activePdfPageIndex=0; exportFilenameBase=`${APP_CONFIG.slug}-tiled`; $('#exportFilename').value=exportFilenameBase; clearSourcePreview(); resetExportProgress(); sourceGeneration += 1; $('#sourceFile').value = ''; renderSelectedFile(); update(); showToast(translate('resetDone'), { tone: 'success' });
       });
 

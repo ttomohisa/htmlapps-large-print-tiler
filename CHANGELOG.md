@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Select PDF output pages with one-based comma-separated page ranges, atomic validation, source-order deduplication, and localized field errors; keep range drafts and preview selection independent.
+- Lock all source-page controls during export and resynchronize ignored/queued changes on success, cancellation, and failure so visible checkboxes match the next PDF export.
+- Add source-level range/IME/draft/export regressions with real synthetic vector PDFs, including unsafe endpoints and repeated overlapping ranges.
+
 - Tie each export to its source generation and captured filename; prevent replaced/removed sources and stale callbacks from producing mislabeled PDFs or changing newer progress.
 - Pause file selection/removal and numeric layout changes during export; prevent duplicate saves and stale Reset confirmations from interrupting newer work.
 - Re-read incomplete sources on Undo, while preserving filename and existing loaded-source page selections.
