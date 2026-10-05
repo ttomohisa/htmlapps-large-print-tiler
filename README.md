@@ -62,6 +62,8 @@ Python and Node.js are not required for the normal build. The builder uses Windo
 6. Select a tile to inspect the actual generated sheet preview. For PDFs, the sheet preview is rendered from the generated tiled PDF itself.
 7. Optionally add an assembly map, confirm the output filename, and save the tiled PDF. Generation progress is shown and can be cancelled.
 
+File selection and removal pause during export. To change the source, cancel or wait for completion. Undo also re-reads a file removed while it was still loading.
+
 ### Multi-page PDFs
 
 All pages are selected by default. Excluded pages generate no tiles or assembly maps. Tile IDs retain the original source page number, for example `P01-R01-C01` and `P03-R01-C01` when page 2 is excluded.
@@ -103,6 +105,8 @@ The repository includes a workflow that rebuilds the standalone HTML and deploys
 Each push to `main` rebuilds the generated HTML from pinned dependencies and verifies the standalone artifacts before publishing them.
 
 ## Development and build layout
+
+Source-only lifecycle regression tests require Node.js 22 or newer. Run `node --test tests/*.test.cjs` or the full `scripts/check-repository.ps1` check. The full check validates the committed root entry point before rebuilding and tests the source and both readable HTML entry points. Browser-based regression scripts remain separate. The default build also refreshes `large-print-tiler.html`; an explicit `-OutputPath` leaves that root entry point unchanged.
 
 ```text
 .

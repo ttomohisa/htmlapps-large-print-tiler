@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- Tie each export to its source generation and captured filename; prevent replaced/removed sources and stale callbacks from producing mislabeled PDFs or changing newer progress.
+- Pause file selection/removal and numeric layout changes during export; prevent duplicate saves and stale Reset confirmations from interrupting newer work.
+- Re-read incomplete sources on Undo, while preserving filename and existing loaded-source page selections.
+- Add browser-free source/export lifecycle regressions and run them against source, standalone, and the tracked root release in CI.
+
 ## 1.0.0 - 2026-09-17
 
 - Publish the initial stable release after the v0.9.0 release-candidate regression.

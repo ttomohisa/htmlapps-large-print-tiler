@@ -7,6 +7,8 @@ on:
       - main
     paths:
       - "src/**"
+      - "tests/**"
+      - "large-print-tiler.html"
       - "scripts/**"
       - "app.config.json"
       - "dependencies.json"
@@ -29,6 +31,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
+
+      - name: Set up Node.js for source-only regressions
+        uses: actions/setup-node@v6
+        with:
+          node-version: "22"
 
       - name: Validate PowerShell syntax and encoding
         shell: powershell

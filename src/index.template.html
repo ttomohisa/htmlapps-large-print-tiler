@@ -981,6 +981,7 @@
       <!-- APP:HELP:BEGIN -->
       <h3 data-i18n="helpBasicsTitle">基本操作</h3>
       <ol><li data-i18n="helpStep1">PDFはCropBox / MediaBoxと回転、画像はピクセル数と解像度情報、SVGはwidth / height / viewBoxを読み取ります。</li><li data-i18n="helpStep2">完成サイズの指定方法、用紙、向き、プリンター余白、重なりを設定します。</li><li data-i18n="helpStep3">右側のプレビューで分割位置・必要枚数・画像の実効解像度を確認し、分割PDFを保存できます。</li></ol>
+      <p data-i18n="helpSourceLifecycle">生成中はファイルの選択・削除を一時停止します。読み込み中に削除したファイルも「元に戻す」で再読み込みできます。</p>
       <h3 data-i18n="helpPrivacyTitle">プライバシー</h3>
       <p data-i18n="helpPrivacyBody">選択したファイルと設定はブラウザー内で扱われ、このアプリから外部サーバーへ送信されません。設定値だけを端末内へ保存する場合があります。</p>
       <h3 data-i18n="helpNotesTitle">このバージョンの範囲</h3>
@@ -1082,7 +1083,7 @@
           summaryFinished: '完成サイズ', summaryPaper: '用紙', summaryGrid: '分割', summarySheets: '必要枚数', summarySheetsSub: '余白・重なりを考慮', summarySheetsMulti: '{page} · 選択 {selected} / {total}ページ · タイル合計 {count}枚', printable: '印刷可能', printableCalibrated: '補正後の実効範囲', rowsCols: '{cols}列 × {rows}行', sheetsCount: '{count}枚', overlapValue: '重なり {value} mm', legendTile: '用紙範囲', legendOverlap: '重なり', legendTrim: '切り取り位置',
           modeSummaryOriginal: '元サイズ', modeSummaryFinished: '指定サイズ', modeSummarySheets: '枚数から算出', calcNote: '分割数は「印刷可能範囲 − 重なり」を次の用紙へ進む幅として計算します。', exportBody: 'PDFはベクターを保ったまま、画像は元ピクセルを保ったまま分割PDFを生成します。複数ページPDFではチェックしたページだけを順番に出力します。', exportFilename: '保存ファイル名', exportPdf: '分割PDFを保存', exportReady: '分割して保存できます。', exportNeedPdf: '対応ファイルを選ぶと分割PDFを保存できます。', exportNeedPages: '出力するPDFページを1ページ以上選択してください。', exportWorking: '分割PDFを生成しています…', exportProgress: '{done} / {total} ページを準備', cancelExport: '生成をキャンセル', exportCancelling: '生成をキャンセルしています…', exportCancelled: 'PDF生成をキャンセルしました。', exportDone: '{count}ページの分割PDFを保存しました。', imageReading: '画像を読み取っています…', imageReadDone: '画像情報を読み取りました。', imageReadError: 'この画像を読み取れませんでした。別のファイルで試してください。', imageNoPhysical: 'この画像には印刷サイズの情報がありません。完成サイズを指定してください。', imagePhysicalMetadata: '埋め込み解像度から算出', imagePhysicalCss: 'CSS 96 px/in 基準', imagePhysicalUnknown: '情報なし', imageOutputRaster: '元ピクセルを維持', imageOutputSvgRaster: 'SVGを画像化', ppiHigh: '高精細', ppiPrint: '印刷向け', ppiPoster: '大型掲示向け', ppiLow: '粗く見える可能性', ppiVector: 'ベクター入力', pdfReading: 'PDFを読み取っています…', pdfReadDone: 'PDFの{count}ページを読み取りました。', pdfReadError: 'このPDFは現在の読み取り方式では解析できませんでした。別のPDFで試してください。', pdfEncrypted: '暗号化・パスワード保護されたPDFにはこのバージョンでは対応していません。', pdfUnsupportedContents: 'このPDFのページ内容は現在の分割出力方式では扱えません。', pdfExportError: '分割PDFを生成できませんでした。',
           errorPositiveSize: '幅と高さは0より大きい値にしてください。', errorMargin: 'プリンター余白が大きすぎて印刷可能範囲がなくなっています。', errorOverlap: '重なりは印刷可能な幅・高さより小さくしてください。', errorSheets: '用紙枚数は1以上の整数にしてください。', warningManySheets: 'この設定では{count}枚必要です。入力値を確認してください。',
-          helpBasicsTitle: '基本操作', helpStep1: 'PDFは各ページのCropBox / MediaBoxと回転を読み取り、出力するページを選択できます。画像はピクセル数と解像度情報、SVGはwidth / height / viewBoxを読み取ります。', helpStep2: '完成サイズの指定方法、用紙、向き、プリンター余白、重なりを設定します。', helpStep3: '右側のプレビューでページごとの分割位置・必要枚数を確認し、進捗を見ながら分割PDFを保存できます。', helpPrivacyTitle: 'プライバシー', helpPrivacyBody: '選択したファイルと設定はブラウザー内で扱われ、このアプリから外部サーバーへ送信されません。設定値だけを端末内へ保存する場合があります。', helpNotesTitle: 'このバージョンの範囲', helpNoteMilestone: 'v1.0.0は初回正式版です。PDF・画像・SVGの分割、プリンター校正、個別プレビュー、スマホ操作、保存・キャンセル、完全ローカル処理をまとめて回帰確認しています。個別プレビューは背景クリックでも閉じられます。', helpNotePrint: '校正時も本番印刷時も、プリンタードライバーやPDFビューアー側の「ページに合わせる」等をOFFにし、100% / 実際のサイズで印刷してください。', helpNoteBrowser: '大きなファイル処理はブラウザーや端末のメモリ制限を受けます。ファイルの内容や端末の空きメモリによっては処理できない場合があります。', helpOffline: '配布用HTMLは単体で開ける構成を維持し、実行時の外部通信を行いません。',
+          helpBasicsTitle: '基本操作', helpStep1: 'PDFは各ページのCropBox / MediaBoxと回転を読み取り、出力するページを選択できます。画像はピクセル数と解像度情報、SVGはwidth / height / viewBoxを読み取ります。', helpStep2: '完成サイズの指定方法、用紙、向き、プリンター余白、重なりを設定します。', helpStep3: '右側のプレビューでページごとの分割位置・必要枚数を確認し、進捗を見ながら分割PDFを保存できます。', helpSourceLifecycle: '生成中はファイルの選択・削除を一時停止します。読み込み中に削除したファイルも「元に戻す」で再読み込みできます。', helpPrivacyTitle: 'プライバシー', helpPrivacyBody: '選択したファイルと設定はブラウザー内で扱われ、このアプリから外部サーバーへ送信されません。設定値だけを端末内へ保存する場合があります。', helpNotesTitle: 'このバージョンの範囲', helpNoteMilestone: 'v1.0.0は初回正式版です。PDF・画像・SVGの分割、プリンター校正、個別プレビュー、スマホ操作、保存・キャンセル、完全ローカル処理をまとめて回帰確認しています。個別プレビューは背景クリックでも閉じられます。', helpNotePrint: '校正時も本番印刷時も、プリンタードライバーやPDFビューアー側の「ページに合わせる」等をOFFにし、100% / 実際のサイズで印刷してください。', helpNoteBrowser: '大きなファイル処理はブラウザーや端末のメモリ制限を受けます。ファイルの内容や端末の空きメモリによっては処理できない場合があります。', helpOffline: '配布用HTMLは単体で開ける構成を維持し、実行時の外部通信を行いません。',
           buildInfo: 'ビルド情報', appVersion: 'アプリバージョン', builtAt: '生成日時', dependencies: '内包依存数', footer: '単一HTML・実行時外部通信なし', confirmTitle: '確認', confirmAction: '実行する', cancel: 'キャンセル', resetTitle: '初期設定に戻しますか？', resetMessage: '選択したファイルを外し、寸法と用紙設定を初期状態へ戻します。', resetConfirm: '初期設定に戻す', resetDone: '初期設定に戻しました', fileSelected: 'ファイルを選択しました。', unsupportedFile: 'この形式は選択できません。PDF / PNG / JPEG / WebP / SVGを選んでください。', fileRemoved: 'ファイルを外しました', undo: '元に戻す', fileRestored: 'ファイルを戻しました', mobilePreview: 'プレビューを見る', mobileSave: 'PDF保存', mobileCancel: 'キャンセル', mobileSummary: '{count}枚 · {paper}', mobileProgress: '{done}/{total}ページ生成中'
         },
         en: {
@@ -1095,7 +1096,7 @@
           summaryFinished: 'Finished size', summaryPaper: 'Paper', summaryGrid: 'Grid', summarySheets: 'Sheets needed', summarySheetsSub: 'Includes margins & overlap', summarySheetsMulti: '{page} · {selected} / {total} pages selected · {count} tile sheets total', printable: 'Printable', printableCalibrated: 'Effective after correction', rowsCols: '{cols} cols × {rows} rows', sheetsCount: '{count} sheets', overlapValue: '{value} mm overlap', legendTile: 'Sheet coverage', legendOverlap: 'Overlap', legendTrim: 'Trim position',
           modeSummaryOriginal: 'Source size', modeSummaryFinished: 'Explicit size', modeSummarySheets: 'Derived from sheets', calcNote: 'Tile count advances each next sheet by “printable area − overlap”.', exportBody: 'PDFs keep vector content, while raster images keep their source pixels. For multi-page PDFs, only checked source pages are exported in order.', exportFilename: 'Save filename', exportPdf: 'Save tiled PDF', exportReady: 'Ready to split and save.', exportNeedPdf: 'Choose a supported file to enable tiled PDF export.', exportNeedPages: 'Select at least one PDF page to export.', exportWorking: 'Generating tiled PDF…', exportProgress: 'Preparing page {done} / {total}', cancelExport: 'Cancel generation', exportCancelling: 'Cancelling generation…', exportCancelled: 'PDF generation cancelled.', exportDone: 'Saved a {count}-page tiled PDF.', imageReading: 'Reading image…', imageReadDone: 'Read image information.', imageReadError: 'This image could not be read. Try another file.', imageNoPhysical: 'This image has no physical-size metadata. Set the finished size explicitly.', imagePhysicalMetadata: 'From embedded resolution', imagePhysicalCss: 'CSS 96 px/in basis', imagePhysicalUnknown: 'Not available', imageOutputRaster: 'Source pixels preserved', imageOutputSvgRaster: 'SVG rasterized', ppiHigh: 'High detail', ppiPrint: 'Print-ready', ppiPoster: 'Large-display range', ppiLow: 'May look coarse', ppiVector: 'Vector source', pdfReading: 'Reading PDF…', pdfReadDone: 'Read {count} PDF pages.', pdfReadError: 'This PDF could not be parsed by the current reader. Try another PDF.', pdfEncrypted: 'Encrypted or password-protected PDFs are not supported in this version.', pdfUnsupportedContents: 'This page content cannot be handled by the current tile-export method.', pdfExportError: 'Could not generate the tiled PDF.',
           errorPositiveSize: 'Width and height must be greater than zero.', errorMargin: 'The printer margin leaves no printable area.', errorOverlap: 'Overlap must be smaller than both printable dimensions.', errorSheets: 'Sheet counts must be integers of 1 or more.', warningManySheets: 'This setup needs {count} sheets. Check the input values.',
-          helpBasicsTitle: 'Basics', helpStep1: 'PDF reads CropBox / MediaBox and rotation for each page, and lets you choose which pages to export. Images read pixel/resolution metadata; SVG reads width / height / viewBox.', helpStep2: 'Choose the sizing mode, paper, orientation, printer margin, and overlap.', helpStep3: 'Use the preview to check per-page tile positions and sheet counts, then save the tiled PDF while following export progress.', helpPrivacyTitle: 'Privacy', helpPrivacyBody: 'Selected files and settings are handled in the browser and are not sent to an external server by this app. Only setting values may be stored locally.', helpNotesTitle: 'Scope of this version', helpNoteMilestone: 'v1.0.0 is the initial stable release. PDF/image/SVG tiling, printer calibration, individual previews, mobile controls, save/cancel flows, and fully local processing are covered by the release regression. Sheet Preview can also be closed by clicking its backdrop.', helpNotePrint: 'For both calibration and final printing, disable “Fit to page” or similar scaling and print at 100% / Actual size.', helpNoteBrowser: 'Large-file processing is subject to browser/device memory limits. Some files may not complete depending on their contents and the memory available on the device.', helpOffline: 'The distributed HTML remains directly openable and performs no runtime external network request.',
+          helpBasicsTitle: 'Basics', helpStep1: 'PDF reads CropBox / MediaBox and rotation for each page, and lets you choose which pages to export. Images read pixel/resolution metadata; SVG reads width / height / viewBox.', helpStep2: 'Choose the sizing mode, paper, orientation, printer margin, and overlap.', helpStep3: 'Use the preview to check per-page tile positions and sheet counts, then save the tiled PDF while following export progress.', helpSourceLifecycle: 'File selection and removal pause during export. Undo re-reads a file that was removed before loading finished.', helpPrivacyTitle: 'Privacy', helpPrivacyBody: 'Selected files and settings are handled in the browser and are not sent to an external server by this app. Only setting values may be stored locally.', helpNotesTitle: 'Scope of this version', helpNoteMilestone: 'v1.0.0 is the initial stable release. PDF/image/SVG tiling, printer calibration, individual previews, mobile controls, save/cancel flows, and fully local processing are covered by the release regression. Sheet Preview can also be closed by clicking its backdrop.', helpNotePrint: 'For both calibration and final printing, disable “Fit to page” or similar scaling and print at 100% / Actual size.', helpNoteBrowser: 'Large-file processing is subject to browser/device memory limits. Some files may not complete depending on their contents and the memory available on the device.', helpOffline: 'The distributed HTML remains directly openable and performs no runtime external network request.',
           buildInfo: 'Build information', appVersion: 'App version', builtAt: 'Built at', dependencies: 'Embedded dependencies', footer: 'Single HTML · No runtime network', confirmTitle: 'Confirm', confirmAction: 'Continue', cancel: 'Cancel', resetTitle: 'Reset settings?', resetMessage: 'Remove the selected file and restore the default document, paper, margin, and overlap values.', resetConfirm: 'Reset', resetDone: 'Settings reset', fileSelected: 'File selected.', unsupportedFile: 'Unsupported file type. Choose PDF, PNG, JPEG, WebP, or SVG.', fileRemoved: 'File removed', undo: 'Undo', fileRestored: 'File restored', mobilePreview: 'View preview', mobileSave: 'Save PDF', mobileCancel: 'Cancel', mobileSummary: '{count} sheets · {paper}', mobileProgress: 'Generating {done}/{total}'
         }
       };
@@ -1121,6 +1122,8 @@
       let exportFilenameBase = `${APP_CONFIG.slug}-tiled`;
       let exportInProgress = false;
       let exportCancelRequested = false;
+      let activeExport = null;
+      let exportSequence = 0;
       let language = readStorage(storageKeys.language) || detectLanguage();
       // Standard output filename contract marker used by repository checks.
       const outputFilename = `${APP_CONFIG.slug}-tiled`;
@@ -1713,6 +1716,7 @@
       }
       function update({ save = true } = {}) { if (save) saveState(); syncControlsFromState(); renderDynamic(); updateExportState(); }
       function setNumericState(key, input, { integer = false, min = 0, max = 100000 } = {}) {
+        if (exportInProgress) { input.value = state[key]; return; }
         const value = Number(input.value);
         if (!Number.isFinite(value)) return;
         state[key] = clamp(integer ? Math.round(value) : value, min, max);
@@ -1846,7 +1850,7 @@
       async function rasterizeSource(source, file, layout, options = {}) {
         ensureExportActive(options);
         const bitmap = await decodeImageBitmap(file);
-        ensureExportActive(options);
+        try { ensureExportActive(options); } catch (error) { if (bitmap?.close) bitmap.close(); throw error; }
         let width = bitmap.naturalWidth || bitmap.width, height = bitmap.naturalHeight || bitmap.height;
         if (source.kind === 'svg') {
           const targetPpi = 150;
@@ -2559,6 +2563,12 @@ Q
         const ready = Boolean(sourceReady && selectedPagesReady && planValid && !exportInProgress);
         $('#exportPdfButton').disabled = !ready;
         $('#exportFilename').disabled = exportInProgress;
+        $('#sourceFile').disabled = exportInProgress;
+        $('#removeFileButton').disabled = exportInProgress;
+        const lockSource = Boolean(pdfSource || imageSource?.physicalKnown);
+        for (const id of ['sourceWidth', 'sourceHeight', 'finishedWidth', 'finishedHeight', 'sheetCols', 'sheetRows', 'margin', 'overlap', 'calibrationMeasuredX', 'calibrationMeasuredY']) {
+          $(`#${id}`).disabled = exportInProgress || (lockSource && (id === 'sourceWidth' || id === 'sourceHeight'));
+        }
         updateMobileActionBar();
         if (exportInProgress || preserveStatus) return;
         if (!sourceReady) $('#exportStatus').textContent = translate('exportNeedPdf');
@@ -2591,10 +2601,21 @@ Q
           state.sourceWidth=state.finishedWidth; state.sourceHeight=state.finishedHeight;
         }
       }
-      async function selectFile(file) {
+      function ownsExport(job) {
+        return activeExport === job && job.generation === sourceGeneration && job.file === selectedFile && job.pdf === pdfSource && job.image === imageSource;
+      }
+      function invalidateExport() {
+        // Detached jobs must not publish progress, errors or cleanup into a newer source/job.
+        if (activeExport) activeExport.cancelled = true;
+        activeExport = null;
+        exportInProgress = false;
+        exportCancelRequested = false;
+      }
+      async function selectFile(file, { filenameBase = null } = {}) {
         if (!file) return;
         if (!isSupportedFile(file)) { $('#sourceFile').value = ''; showToast(translate('unsupportedFile'), { tone: 'warning' }); return; }
-        selectedFile=file; pdfSource=null; imageSource=null; selectedPdfPages=new Set(); activePdfPageIndex=0; clearSourcePreview(); resetExportProgress(); setDefaultExportFilename(file); sourceGeneration+=1; const generation=sourceGeneration; renderSelectedFile(); showToast(translate('fileSelected'));
+        invalidateExport();
+        selectedFile=file; pdfSource=null; imageSource=null; selectedPdfPages=new Set(); activePdfPageIndex=0; clearSourcePreview(); resetExportProgress(); setDefaultExportFilename(file); if (filenameBase !== null) { exportFilenameBase=sanitizeFilenameBase(filenameBase); $('#exportFilename').value=exportFilenameBase; } sourceGeneration+=1; const generation=sourceGeneration; renderSelectedFile(); showToast(translate('fileSelected'));
         if (isPdfFile(file)) {
           $('#sourceNote').textContent=translate('pdfReading'); $('#exportStatus').textContent=translate('pdfReading');
           try {
@@ -2616,7 +2637,7 @@ Q
           const parsed=await parseImageSource(file,generation); if (!parsed || generation!==sourceGeneration) return; imageSource=parsed; sourcePreviewUrl=URL.createObjectURL(file); applyParsedSourceSize(parsed);
           update(); renderSelectedFile(); $('#sourceNote').textContent=parsed.physicalKnown?translate('sourceNote'):translate('imageNoPhysical'); showToast(translate('imageReadDone'),{tone:'success'});
         } catch(error) {
-          console.error(error); if (generation!==sourceGeneration) return; imageSource=null; clearSourcePreview(); renderSelectedFile(); $('#sourceNote').textContent=translate('sourceNote'); $('#exportStatus').textContent=translate('imageReadError'); showToast(translate('imageReadError'),{tone:'warning',duration:6000});
+          if (generation!==sourceGeneration) return; console.error(error); imageSource=null; clearSourcePreview(); renderSelectedFile(); $('#sourceNote').textContent=translate('sourceNote'); $('#exportStatus').textContent=translate('imageReadError'); showToast(translate('imageReadError'),{tone:'warning',duration:6000});
         }
       }
 
@@ -2625,9 +2646,18 @@ Q
         const removed=selectedFile, removedPdf=pdfSource, removedImage=imageSource;
         const removedPages=new Set(selectedPdfPages), removedActive=activePdfPageIndex, removedFilename=exportFilenameBase;
         const generationAfterRemove=sourceGeneration+1;
-        selectedFile=null; pdfSource=null; imageSource=null; selectedPdfPages=new Set(); activePdfPageIndex=0; exportFilenameBase=`${APP_CONFIG.slug}-tiled`; $('#exportFilename').value=exportFilenameBase; clearSourcePreview(); resetExportProgress(); sourceGeneration=generationAfterRemove; $('#sourceFile').value=''; renderSelectedFile(); renderDynamic();
+        invalidateExport();
+        selectedFile=null; pdfSource=null; imageSource=null; selectedPdfPages=new Set(); activePdfPageIndex=0; exportFilenameBase=`${APP_CONFIG.slug}-tiled`; $('#exportFilename').value=exportFilenameBase; clearSourcePreview(); resetExportProgress(); sourceGeneration=generationAfterRemove; $('#sourceFile').value=''; $('#sourceNote').textContent=translate('sourceNote'); renderSelectedFile(); renderDynamic();
         showToast(translate('fileRemoved'), { actionLabel:translate('undo'), duration:5000, onAction:async()=>{
-          if (sourceGeneration!==generationAfterRemove) return; selectedFile=removed; pdfSource=removedPdf; imageSource=removedImage; selectedPdfPages=new Set(removedPages); activePdfPageIndex=removedActive; exportFilenameBase=removedFilename; $('#exportFilename').value=exportFilenameBase; sourceGeneration+=1; if (imageSource) sourcePreviewUrl=URL.createObjectURL(removed); renderSelectedFile();
+          if (sourceGeneration!==generationAfterRemove) return;
+          if (!removedPdf && !removedImage) {
+            // A read invalidated by removal cannot finish the restored selection.
+            const restoredGeneration = sourceGeneration + 1;
+            await selectFile(removed, { filenameBase: removedFilename });
+            if (sourceGeneration === restoredGeneration && (pdfSource || imageSource)) showToast(translate('fileRestored'));
+            return;
+          }
+          selectedFile=removed; pdfSource=removedPdf; imageSource=removedImage; selectedPdfPages=new Set(removedPages); activePdfPageIndex=removedActive; exportFilenameBase=removedFilename; $('#exportFilename').value=exportFilenameBase; sourceGeneration+=1; if (imageSource) sourcePreviewUrl=URL.createObjectURL(removed); renderSelectedFile();
           if (pdfSource) { const page=getActivePdfPage() || pdfSource.pages[0]; state.sourceWidth=Number(page.widthMm.toFixed(4)); state.sourceHeight=Number(page.heightMm.toFixed(4)); } else if (imageSource) applyParsedSourceSize(imageSource); update(); showToast(translate('fileRestored'));
         }});
       }
@@ -2658,7 +2688,7 @@ Q
       $('#languageButton').addEventListener('click', () => { language = language === 'ja' ? 'en' : 'ja'; writeStorage(storageKeys.language, language); applyLanguage(); });
       const helpDialog = $('#helpDialog'); $('#helpButton').addEventListener('click', () => helpDialog.showModal()); $('#closeHelpButton').addEventListener('click', () => helpDialog.close()); helpDialog.addEventListener('cancel', () => {}); helpDialog.addEventListener('click', event => { const rect = helpDialog.getBoundingClientRect(); if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) helpDialog.close(); });
 
-      $('#sourceFile').addEventListener('change', event => selectFile(event.target.files?.[0]));
+      $('#sourceFile').addEventListener('change', event => { if (!exportInProgress) return selectFile(event.target.files?.[0]); });
       const dropZone = $('#dropZone');
       ['dragenter', 'dragover'].forEach(type => dropZone.addEventListener(type, event => { event.preventDefault(); if (!exportInProgress) dropZone.classList.add('dragging'); }));
       ['dragleave', 'drop'].forEach(type => dropZone.addEventListener(type, event => { event.preventDefault(); dropZone.classList.remove('dragging'); }));
@@ -2741,14 +2771,24 @@ Q
       $('#cancelExportButton').addEventListener('click', () => {
         if (!exportInProgress || exportCancelRequested) return;
         exportCancelRequested = true;
+        if (activeExport) activeExport.cancelled = true;
         $('#cancelExportButton').disabled = true;
         $('#exportStatus').textContent = translate('exportCancelling');
         updateMobileActionBar();
       });
       $('#exportPdfButton').addEventListener('click', async () => {
+        if (exportInProgress) return;
         const layout = calculateLayout();
         const pdfPlan = pdfSource ? buildPdfExportPlan() : null;
         if (!selectedFile || (!pdfSource && !imageSource) || !layout.valid || (pdfSource && !pdfPlan?.valid)) return;
+        const job = {
+          generation: sourceGeneration, file: selectedFile, pdf: pdfSource, image: imageSource,
+          filename: sanitizeFilenameBase($('#exportFilename').value || exportFilenameBase),
+          includeAssemblyMap: state.includeAssemblyMap, cancelled: false
+        };
+        activeExport = job;
+        exportSequence += 1;
+        exportFilenameBase = job.filename; $('#exportFilename').value = job.filename;
         exportInProgress = true; exportCancelRequested = false;
         const total = pdfSource ? pdfPlan.totalOutputPages : layout.count + (state.includeAssemblyMap ? 1 : 0);
         setExportProgress(0,total);
@@ -2757,29 +2797,38 @@ Q
         updateExportState();
         try {
           await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
-          const options = { includeAssemblyMap: state.includeAssemblyMap, shouldCancel:()=>exportCancelRequested, onProgress:setExportProgress };
-          const bytes = pdfSource ? await buildTiledPdf(pdfSource, pdfPlan.indexes, options) : await buildTiledImagePdf(imageSource, selectedFile, layout, options);
+          const options = {
+            includeAssemblyMap: job.includeAssemblyMap,
+            shouldCancel: () => job.cancelled || !ownsExport(job),
+            onProgress: (completed, outputPages) => { if (ownsExport(job) && !job.cancelled) setExportProgress(completed, outputPages); }
+          };
           ensureExportActive(options);
-          exportFilenameBase = sanitizeFilenameBase($('#exportFilename').value || exportFilenameBase);
-          $('#exportFilename').value = exportFilenameBase;
-          downloadBytes(bytes, `${exportFilenameBase}.pdf`);
+          const bytes = job.pdf ? await buildTiledPdf(job.pdf, pdfPlan.indexes, options) : await buildTiledImagePdf(job.image, job.file, layout, options);
+          ensureExportActive(options);
+          downloadBytes(bytes, `${job.filename}.pdf`);
           setExportProgress(total,total); $('#cancelExportButton').hidden = true;
           const message = translate('exportDone', { count: total });
           $('#exportStatus').textContent = message; showToast(message, { tone: 'success' });
         } catch (error) {
+          if (!ownsExport(job)) return;
           if (error?.message === 'export-cancelled') {
             resetExportProgress(); $('#exportStatus').textContent = translate('exportCancelled'); showToast(translate('exportCancelled'));
           } else {
             console.error(error); resetExportProgress(); $('#exportStatus').textContent = translate('pdfExportError'); showToast(translate('pdfExportError'), { tone: 'warning' });
           }
         } finally {
-          exportInProgress = false; exportCancelRequested = false; updateExportState({ preserveStatus:true });
+          if (ownsExport(job)) {
+            activeExport = null;
+            exportInProgress = false; exportCancelRequested = false; updateExportState({ preserveStatus:true });
+          }
         }
       });
       $('#resetButton').addEventListener('click', async () => {
         if (exportInProgress) return;
+        const generation = sourceGeneration, previousExport = exportSequence;
         const ok = await AppConfirm.ask({ title: translate('resetTitle'), message: translate('resetMessage'), confirmLabel: translate('resetConfirm'), cancelLabel: translate('cancel') });
-        if (!ok) return;
+        if (!ok || exportInProgress || generation !== sourceGeneration || previousExport !== exportSequence) return;
+        invalidateExport();
         state = { ...defaultState }; selectedFile = null; pdfSource = null; imageSource = null; selectedPdfPages=new Set(); activePdfPageIndex=0; exportFilenameBase=`${APP_CONFIG.slug}-tiled`; $('#exportFilename').value=exportFilenameBase; clearSourcePreview(); resetExportProgress(); sourceGeneration += 1; $('#sourceFile').value = ''; renderSelectedFile(); update(); showToast(translate('resetDone'), { tone: 'success' });
       });
 
