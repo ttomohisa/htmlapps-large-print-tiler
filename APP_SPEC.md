@@ -83,6 +83,11 @@ Overlap is an intended final physical distance. Its PDF-coordinate representatio
 - All parsed pages are selected by default.
 - `Select all` selects every source page.
 - `Clear all` leaves the document loaded but disables export until at least one page is selected.
+- Multi-page PDFs also offer a labeled page-range draft and Apply action. Use one-based ASCII digits, comma-separated pages, and inclusive ASCII-hyphen ranges, for example `1-3, 5`. Whitespace around numbers/separators and leading zeroes are accepted.
+- Apply or Enter (outside IME composition) replaces `selectedPdfPages` atomically. Validate every endpoint against the loaded page count before expanding; reject empty tokens/input, zero, negatives, decimals, exponents, reversed ranges, unsupported separators, and unsafe or out-of-bounds endpoints. Invalid input retains the draft and current selection with a localized field-local error.
+- Deduplicate pages and keep original source order, even when the input order differs. Overlapping ranges expand each page at most once.
+- Typing a range does not change output. The draft is independent of the checkbox selection and is cleared after successful Apply, source replacement/removal, Reset, and Undo. Ordinary rerenders, layout/language changes, and export completion/cancellation/failure preserve the editable draft. The draft and its errors are not persisted.
+- Range application never changes the active preview page. Subsequent checkbox, Select all, and Clear all actions continue to operate on the same authoritative selection.
 - Selecting a page name changes only the active preview page; it does not implicitly include/exclude that page.
 - Original-size mode calculates each selected page from its own physical dimensions.
 - Finished-size and sheet-count modes apply the chosen global settings to every selected page.
@@ -122,7 +127,7 @@ Current limitations remain:
 
 The export filename is editable. Progress is measured in output PDF pages and includes assembly maps when enabled. Cancellation is cooperative and prevents a partial completed download.
 
-Each export owns the selected file, parsed source, source generation, and sanitized output filename captured when Save is pressed. File-picker and Remove controls are disabled while exporting, and queued picker/drop changes are ignored. Numeric layout changes are ignored while exporting, like the other layout controls. Duplicate Save actions do not start concurrent exports. Replacement/removal invalidates any older job: it cannot download, publish progress/errors, or clear a newer job's state. Cancellation prevents download even after the final output-page yield.
+Each export owns the selected file, parsed source, source generation, and sanitized output filename captured when Save is pressed. File-picker and Remove controls are disabled while exporting, and queued picker/drop changes are ignored. All source-page controls (checkboxes, preview-page buttons, Select all, Clear all, range draft and Apply) are disabled during export. Handler guards reject queued page edits and resynchronize visible controls from authoritative state; success, cancellation and failure restore the controls without selection drift. Numeric layout changes are ignored while exporting, like the other layout controls. Duplicate Save actions do not start concurrent exports. Replacement/removal invalidates any older job: it cannot download, publish progress/errors, or clear a newer job's state. Cancellation prevents download even after the final output-page yield.
 
 Removing a file during reading invalidates that read. Undo re-reads an incomplete source under a fresh generation, preserving its edited filename. A fully read source retains its page selections and active page through Undo. A later selection wins over old read completions, errors, and Undo actions. A Reset confirmation opened before a source change or export cannot clear the newer work.
 

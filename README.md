@@ -62,11 +62,15 @@ Python and Node.js are not required for the normal build. The builder uses Windo
 6. Select a tile to inspect the actual generated sheet preview. For PDFs, the sheet preview is rendered from the generated tiled PDF itself.
 7. Optionally add an assembly map, confirm the output filename, and save the tiled PDF. Generation progress is shown and can be cancelled.
 
-File selection and removal pause during export. To change the source, cancel or wait for completion. Undo also re-reads a file removed while it was still loading.
+File selection/removal and page selection/preview controls pause during export. To change the source, cancel or wait for completion. Undo also re-reads a file removed while it was still loading.
 
 ### Multi-page PDFs
 
 All pages are selected by default. Excluded pages generate no tiles or assembly maps. Tile IDs retain the original source page number, for example `P01-R01-C01` and `P03-R01-C01` when page 2 is excluded.
+
+Use the checkboxes or enter a range such as `1-3, 5` and choose **Apply** (or press Enter). Ranges use one-based page numbers, ASCII commas and hyphens. Apply replaces the selection; duplicate pages export once in the original PDF order. Typing alone does not change the selection. Invalid or empty ranges show an error and keep the current selection; use **Clear all** to deselect every page.
+
+The range field is an editable draft, independent of the preview page. It clears after a successful Apply, source change/removal, Reset, or Undo. Selecting a page name only changes the preview, including when that page is excluded.
 
 Source-size mode uses each PDF page's own physical dimensions. Finished-size, sheet-count, paper, overlap, and printer-calibration settings are shared across the selected pages.
 
