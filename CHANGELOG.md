@@ -11,6 +11,12 @@
 - Re-read incomplete sources on Undo, while preserving filename and existing loaded-source page selections.
 - Add browser-free source/export lifecycle regressions and run them against source, standalone, and the tracked root release in CI.
 
+## 1.0.1 — 2026-10-06
+
+- Standardize the header language targets as EN / JA and synchronize localized action labels and tooltips.
+- Refresh the static header version fallback and preserve the existing fully-local privacy badge and responsive layout.
+- Add runtime header regressions for fresh language detection, repeated toggles, saved preferences, unavailable storage, and release-version consistency.
+
 ## 1.0.0 - 2026-09-17
 
 - Publish the initial stable release after the v0.9.0 release-candidate regression.

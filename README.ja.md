@@ -16,6 +16,8 @@ GitHub Pagesから最初のHTMLを読み込んだ後、ファイル解析、プ�
 
 [![Large Print Tilerの画面](assets/screenshot.png)](https://ttomohisa.github.io/htmlapps-large-print-tiler/)
 
+ヘッダーのENで英語、JAで日本語に切り替えます。バージョンは `vMAJOR.MINOR.PATCH` 形式、プライバシーバッジは「完全ローカル処理」/「Fully local processing」と表示します。
+
 ## 主な機能
 
 - **物理寸法を基準に分割** — PDFの元サイズを維持するほか、完成幅・高さを指定したり、必要な用紙枚数から完成サイズを逆算したりできます。
