@@ -16,6 +16,8 @@ GitHub Pages only delivers the initial HTML. After the app loads, source-file pa
 
 [![Large Print Tiler screenshot](assets/screenshot-en.png)](https://ttomohisa.github.io/htmlapps-large-print-tiler/)
 
+The header uses EN to switch to English and JA to switch to Japanese. It shows the app version as `vMAJOR.MINOR.PATCH`; the privacy badge reads “Fully local processing” / “完全ローカル処理”.
+
 ## Features
 
 - **Tile by real-world size** — Keep a source PDF's physical size, enter a finished width/height, or derive the finished size from a requested sheet count.

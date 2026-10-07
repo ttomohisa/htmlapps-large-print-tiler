@@ -734,12 +734,12 @@
       <div class="brand">
         <div class="brand-mark" aria-hidden="true"><img id="appBrandIcon" src="__APP_ICON_DATA_URI__" alt=""></div>
         <div class="brand-copy">
-          <p class="brand-name"><span id="brandName">Large Print Tiler</span><span class="version-badge" id="versionBadge">v1.0.0</span></p>
+          <p class="brand-name"><span id="brandName">Large Print Tiler</span><span class="version-badge" id="versionBadge">v1.0.1</span></p>
           <p class="brand-meta" data-i18n="brandMeta">実寸分割・完全ローカル処理</p>
         </div>
       </div>
       <div class="header-actions">
-        <button class="language-button" id="languageButton" type="button" aria-label="Switch language">EN</button>
+        <button class="language-button" id="languageButton" type="button" aria-label="英語に切り替え" title="英語に切り替え">EN</button>
         <button class="icon-button header-icon-button" id="helpButton" type="button" data-i18n-title="helpTitle" data-i18n-aria-label="helpTitle" title="使い方と注意事項" aria-label="使い方と注意事項">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.8 9a2.35 2.35 0 1 1 3.72 1.9c-.92.67-1.52 1.12-1.52 2.1"/><path d="M12 17h.01"/></svg>
         </button>
@@ -997,6 +997,7 @@
     <div class="dialog-body">
       <!-- APP:HELP:BEGIN -->
       <h3 data-i18n="helpBasicsTitle">基本操作</h3>
+      <p data-i18n="helpLanguage">ヘッダーのENで英語、JAで日本語に切り替えます。</p>
       <ol><li data-i18n="helpStep1">PDFはCropBox / MediaBoxと回転、画像はピクセル数と解像度情報、SVGはwidth / height / viewBoxを読み取ります。</li><li data-i18n="helpStep2">完成サイズの指定方法、用紙、向き、プリンター余白、重なりを設定します。</li><li data-i18n="helpStep3">右側のプレビューで分割位置・必要枚数・画像の実効解像度を確認し、分割PDFを保存できます。</li></ol>
       <p data-i18n="helpSourceLifecycle">生成中はファイルの選択・削除とページの選択・切り替えを一時停止します。読み込み中に削除したファイルも「元に戻す」で再読み込みできます。</p>
       <p data-i18n="helpPageRange">ページ範囲（例: 1-3, 5）を入力し「適用」またはEnterで出力ページの選択を置き換えます。重複はまとめ、元のページ順に出力します。入力だけでは選択は変わらず、不正な範囲も選択を変更しません。適用後、ファイル変更、リセット、元に戻す操作で入力欄を空にします。</p>
@@ -1092,7 +1093,7 @@
 
       const translations = {
         ja: {
-          brandMeta: '実寸分割・完全ローカル処理', helpTitle: '使い方と注意事項', close: '閉じる',
+          brandMeta: '実寸分割・完全ローカル処理', helpTitle: '使い方と注意事項', close: '閉じる', helpLanguage: 'ヘッダーのENで英語、JAで日本語に切り替えます。',
           introTitle: '大きなPDF・画像を、普通の用紙へ分割', lead: '完成サイズ、プリンター余白、重なりを確認しながら、貼り合わせに必要な用紙枚数を計算します。', localBadge: '完全ローカル処理',
           pdfPageRangeLabel: 'ページ範囲で選択', pdfPageRangeApply: '適用', pdfPageRangeHint: '例: 1-3, 5。半角の数字・カンマ・ハイフンで指定し、適用すると選択を置き換えます。', pdfPageRangeEmpty: 'ページ範囲を入力してください。すべて外す場合は「すべて解除」を使います。', pdfPageRangeInvalid: '1〜{count}のページ番号を指定してください（例: 1-3, 5）。空の項目や逆順の範囲は使えません。選択は変更されていません。', pdfPageRangeApplied: '{count}ページを選択しました。',
           step1: 'STEP 1', sourceTitle: 'ファイルと元サイズ', sourceLead: 'PDFは実寸、画像はピクセル数と解像度情報、SVGは寸法指定を自動で読み取ります。', dropTitle: 'PDF・画像・SVGを選択', dropBody: 'ここにドロップ、またはクリックして選択', removeFile: 'ファイルを外す', sourceNote: 'PDF・画像・SVGの寸法情報を端末内で読み取ります。物理サイズがない画像は完成サイズを指定してください。', sourceWidth: '元の幅', sourceHeight: '元の高さ', pdfPages: 'PDFページ', pdfBox: '使用するページ領域', pdfRotation: 'ページ回転', pdfUserUnit: 'PDF単位', pdfOutputPages: '出力ページ', pdfOutputPagesNote: 'チェックしたページだけを出力します。ページ名を押すと右側のプレビュー対象を切り替えます。', selectAllPages: 'すべて選択', clearPages: 'すべて解除', pdfPageLabel: 'P{page}', pdfPageMeta: '{width} × {height} mm · {cols}列 × {rows}行 · {count}枚', imagePixels: '画像サイズ', imagePhysical: '物理サイズ', imagePpi: '実効解像度', imageOutput: 'PDF出力',
@@ -1106,7 +1107,7 @@
           buildInfo: 'ビルド情報', appVersion: 'アプリバージョン', builtAt: '生成日時', dependencies: '内包依存数', footer: '単一HTML・実行時外部通信なし', confirmTitle: '確認', confirmAction: '実行する', cancel: 'キャンセル', resetTitle: '初期設定に戻しますか？', resetMessage: '選択したファイルを外し、寸法と用紙設定を初期状態へ戻します。', resetConfirm: '初期設定に戻す', resetDone: '初期設定に戻しました', fileSelected: 'ファイルを選択しました。', unsupportedFile: 'この形式は選択できません。PDF / PNG / JPEG / WebP / SVGを選んでください。', fileRemoved: 'ファイルを外しました', undo: '元に戻す', fileRestored: 'ファイルを戻しました', mobilePreview: 'プレビューを見る', mobileSave: 'PDF保存', mobileCancel: 'キャンセル', mobileSummary: '{count}枚 · {paper}', mobileProgress: '{done}/{total}ページ生成中'
         },
         en: {
-          brandMeta: 'Physical-size tiling · Fully local', helpTitle: 'How to use & notes', close: 'Close',
+          brandMeta: 'Physical-size tiling · Fully local', helpTitle: 'How to use & notes', close: 'Close', helpLanguage: 'Use EN in the header to switch to English, or JA to switch to Japanese.',
           introTitle: 'Split large PDFs and images across ordinary paper', lead: 'Check the finished size, printer margins, and overlap while calculating how many sheets are needed for assembly.', localBadge: 'Fully local processing',
           pdfPageRangeLabel: 'Select by page range', pdfPageRangeApply: 'Apply', pdfPageRangeHint: 'Example: 1-3, 5. Use ASCII digits, commas and hyphens. Apply replaces the selection.', pdfPageRangeEmpty: 'Enter a page range. Use Clear all to deselect every page.', pdfPageRangeInvalid: 'Use page numbers from 1 to {count} (for example, 1-3, 5), with no empty items or reversed ranges. The selection is unchanged.', pdfPageRangeApplied: '{count} pages selected.',
           step1: 'STEP 1', sourceTitle: 'File & source size', sourceLead: 'PDF physical size, image pixels/resolution metadata, and SVG dimensions are read automatically.', dropTitle: 'Choose PDF, image, or SVG', dropBody: 'Drop a file here, or click to choose', removeFile: 'Remove file', sourceNote: 'PDF, image, and SVG dimensions are read locally. Images without physical-size metadata should use an explicit finished size.', sourceWidth: 'Source width', sourceHeight: 'Source height', pdfPages: 'PDF pages', pdfBox: 'Page area used', pdfRotation: 'Page rotation', pdfUserUnit: 'PDF unit', pdfOutputPages: 'Output pages', pdfOutputPagesNote: 'Only checked pages are exported. Select a page name to switch the preview on the right.', selectAllPages: 'Select all', clearPages: 'Clear all', pdfPageLabel: 'P{page}', pdfPageMeta: '{width} × {height} mm · {cols} cols × {rows} rows · {count} sheets', imagePixels: 'Image size', imagePhysical: 'Physical size', imagePpi: 'Effective resolution', imageOutput: 'PDF output',
@@ -2748,8 +2749,9 @@ Q
         document.querySelectorAll('[data-i18n]').forEach(element => { element.textContent = translate(element.dataset.i18n); });
         document.querySelectorAll('[data-i18n-title]').forEach(element => { element.title = translate(element.dataset.i18nTitle); });
         document.querySelectorAll('[data-i18n-aria-label]').forEach(element => { element.setAttribute('aria-label', translate(element.dataset.i18nAriaLabel)); });
-        $('#languageButton').textContent = language === 'ja' ? 'EN' : '日本語';
+        $('#languageButton').textContent = language === 'ja' ? 'EN' : 'JA';
         $('#languageButton').setAttribute('aria-label', language === 'ja' ? '英語に切り替え' : 'Switch to Japanese');
+        $('#languageButton').title = $('#languageButton').getAttribute('aria-label');
         document.title = language === 'ja' ? APP_CONFIG.nameJa : APP_CONFIG.name;
         $('#brandName').textContent = language === 'ja' ? APP_CONFIG.nameJa : APP_CONFIG.name;
         $('#footerName').textContent = language === 'ja' ? APP_CONFIG.nameJa : APP_CONFIG.name;
