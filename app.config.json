@@ -3,7 +3,7 @@
   "name": "Large Print Tiler",
   "nameJa": "大判分割印刷",
   "slug": "large-print-tiler",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Split large-format documents into printable paper tiles while keeping physical dimensions explicit.",
   "descriptionJa": "大判ドキュメントを、物理寸法を確認しながら家庭用紙サイズへ分割するブラウザーアプリです。",
   "defaultLanguage": "auto",

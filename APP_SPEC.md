@@ -4,7 +4,7 @@
 
 - **Name:** Large Print Tiler
 - **Japanese name:** 大判分割印刷
-- **Version:** 1.0.1
+- **Version:** 1.0.2
 - **Repository:** `ttomohisa/htmlapps-large-print-tiler`
 - **Purpose:** Split large PDF/image/SVG content across ordinary paper while keeping intended physical size, printer margin, overlap, and image resolution explicit.
 - **Release artifacts:** `dist/index.html` and `dist/index.self-extract.html`.
@@ -215,3 +215,9 @@ Effective raster PPI is based on the intended finished size. Printer calibration
 - Show EN as the language-switch target in Japanese and JA in English. Keep the localized action-target aria-label and matching title synchronized on initial load, repeated toggles, and saved-language reload.
 - Display the current app version as `vMAJOR.MINOR.PATCH`, including the static startup fallback.
 - Preserve the existing responsive layout and the privacy badge text 完全ローカル処理 / Fully local processing.
+
+## v1.0.2 — Compact dialog and keyboard fixes
+
+- Lock root-page scrolling while a native dialog is open. Keep the reset header visible and let its content scroll in short windows.
+- Only actual sheet-preview backdrop clicks close the preview; keyboard zoom controls remain inside it.
+- Preserve the canonical shield/check badge, app artwork, processing and export behavior.

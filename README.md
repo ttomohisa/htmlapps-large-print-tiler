@@ -30,6 +30,8 @@ The header uses EN to switch to English and JA to switch to Japanese. It shows t
 - **Use it on desktop or mobile** — Japanese/English UI, touch-friendly controls, export progress, cancellation, editable filenames, and a mobile bottom action are included.
 - **Run fully locally after load** — PDF.js and its worker are embedded in the generated HTML. Runtime external connections are blocked by CSP.
 
+Dialogs keep the background still, reset confirmation content scrolls in short windows, and sheet-preview zoom remains open when operated by keyboard.
+
 ## Quick start
 
 ### Use the web demo
