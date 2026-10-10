@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.2 — 2026-10-10
+
+- Keep short Reset confirmation content scrollable beneath a visible header and pause background scrolling for native dialogs.
+- Preserve the sheet preview when zoom/Fit controls are activated from the keyboard.
+- Add dialog layout, keyboard-click, and unchanged local-processing shield regression coverage.
+
 ## Unreleased
 
 - Select PDF output pages with one-based comma-separated page ranges, atomic validation, source-order deduplication, and localized field errors; keep range drafts and preview selection independent.

@@ -231,7 +231,7 @@ if ([string]::IsNullOrWhiteSpace([string]$app.version)) { throw "app.config.json
 
 # Check the committed root entry point before the build can regenerate it.
 $nodeCommand = Get-Command node -ErrorAction Stop
-& $nodeCommand.Source --test (Join-Path $Root "tests/source-export-lifecycle.test.cjs") (Join-Path $Root "tests/release-parity.test.cjs") (Join-Path $Root "tests/header-contract.test.cjs")
+& $nodeCommand.Source --test (Join-Path $Root "tests/source-export-lifecycle.test.cjs") (Join-Path $Root "tests/release-parity.test.cjs") (Join-Path $Root "tests/header-contract.test.cjs") (Join-Path $Root "tests/dialog-layout.test.cjs")
 if ($LASTEXITCODE -ne 0) { throw "Source lifecycle/root parity regressions failed." }
 
 $buildArguments = @{}
@@ -241,7 +241,7 @@ if ($ForceDownload) { $buildArguments.ForceDownload = $true }
 try {
   foreach ($variant in @("dist/index.html", "large-print-tiler.html")) {
     $env:TILER_HTML = $variant
-    & $nodeCommand.Source --test (Join-Path $Root "tests/source-export-lifecycle.test.cjs") (Join-Path $Root "tests/header-contract.test.cjs")
+    & $nodeCommand.Source --test (Join-Path $Root "tests/source-export-lifecycle.test.cjs") (Join-Path $Root "tests/header-contract.test.cjs") (Join-Path $Root "tests/dialog-layout.test.cjs")
     if ($LASTEXITCODE -ne 0) { throw "Source/export lifecycle regressions failed for $variant." }
   }
 } finally {
