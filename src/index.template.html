@@ -659,6 +659,7 @@
     .calibration-content .calibration-head { padding-top: 10px; }
     .mobile-action-bar { display: none; }
     @media (max-width: 930px) {
+      footer { display: none; }
       .app-grid { grid-template-columns: 1fr; }
       .preview-panel { position: static; scroll-margin-top: calc(var(--header-height) + 10px); }
       .preview-stage { min-height: 420px; }
@@ -961,17 +962,6 @@
       </section>
     </div>
     <!-- APP:END -->
-
-    <section class="build-section">
-      <details>
-        <summary data-i18n="buildInfo">ビルド情報</summary>
-        <div class="build-grid">
-          <div class="build-item"><span data-i18n="appVersion">アプリバージョン</span><strong id="buildVersion">—</strong></div>
-          <div class="build-item"><span data-i18n="builtAt">生成日時</span><strong id="builtAt">—</strong></div>
-          <div class="build-item"><span data-i18n="dependencies">内包依存数</span><strong id="dependencyCount">0</strong></div>
-        </div>
-      </details>
-    </section>
   </main>
 
   <footer><span id="footerName">Large Print Tiler</span> · MIT License · <span data-i18n="footer">単一HTML・実行時外部通信なし</span></footer>
@@ -1010,6 +1000,16 @@
       <ul><li data-i18n="helpNotePrint">校正時も本番印刷時も「100% / 実際のサイズ」で印刷し、「ページに合わせる」等の自動拡大縮小をOFFにしてください。</li><li data-i18n="helpNoteBrowser">大きなファイル処理はブラウザーや端末のメモリ制限を受けます。ファイルの内容や端末の空きメモリによっては処理できない場合があります。</li></ul>
       <p class="dialog-note" data-i18n="helpOffline">配布用HTMLは単体で開ける構成を維持し、実行時の外部通信を行いません。</p>
       <!-- APP:HELP:END -->
+    <section class="build-section">
+      <details>
+        <summary data-i18n="buildInfo">ビルド情報</summary>
+        <div class="build-grid">
+          <div class="build-item"><span data-i18n="appVersion">アプリバージョン</span><strong id="buildVersion">—</strong></div>
+          <div class="build-item"><span data-i18n="builtAt">生成日時</span><strong id="builtAt">—</strong></div>
+          <div class="build-item"><span data-i18n="dependencies">内包依存数</span><strong id="dependencyCount">0</strong></div>
+        </div>
+      </details>
+    </section>
     </div>
   </dialog>
 
@@ -2771,7 +2771,7 @@ Q
       $('#dependencyCount').textContent = String(BUILD_MANIFEST.dependencies?.length || 0);
 
       $('#languageButton').addEventListener('click', () => { language = language === 'ja' ? 'en' : 'ja'; writeStorage(storageKeys.language, language); applyLanguage(); });
-      const helpDialog = $('#helpDialog'); $('#helpButton').addEventListener('click', () => helpDialog.showModal()); $('#closeHelpButton').addEventListener('click', () => helpDialog.close()); helpDialog.addEventListener('cancel', () => {}); helpDialog.addEventListener('click', event => { const rect = helpDialog.getBoundingClientRect(); if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) helpDialog.close(); });
+      const helpDialog = $('#helpDialog'); $('#helpButton').addEventListener('click', () => helpDialog.showModal()); $('#closeHelpButton').addEventListener('click', () => helpDialog.close()); helpDialog.addEventListener('cancel', () => {}); helpDialog.addEventListener('click', event => {if(event.target!==helpDialog)return; const rect = helpDialog.getBoundingClientRect(); if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) helpDialog.close(); });
 
       $('#sourceFile').addEventListener('change', event => { if (!exportInProgress) return selectFile(event.target.files?.[0]); });
       const dropZone = $('#dropZone');

@@ -221,3 +221,8 @@ Effective raster PPI is based on the intended finished size. Printer calibration
 - Lock root-page scrolling while a native dialog is open. Keep the reset header visible and let its content scroll in short windows.
 - Only actual sheet-preview backdrop clicks close the preview; keyboard zoom controls remain inside it.
 - Preserve the canonical shield/check badge, app artwork, processing and export behavior.
+
+## Shared mobile footer and Help build information
+
+- Hide only the informational page footer at the existing mobile-workflow breakpoint (930px, including tablet widths where the existing Preview/Save bar is shown); preserve functional bottom navigation/actions and Help controls.
+- The existing build-information disclosure is the final item inside the scrollable Help body, retaining its metadata IDs, population, and desktop/mobile availability.
