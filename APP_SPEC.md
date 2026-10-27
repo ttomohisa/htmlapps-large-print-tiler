@@ -4,7 +4,7 @@
 
 - **Name:** Large Print Tiler
 - **Japanese name:** 大判分割印刷
-- **Version:** 1.0.2
+- **Version:** 1.0.3
 - **Repository:** `ttomohisa/htmlapps-large-print-tiler`
 - **Purpose:** Split large PDF/image/SVG content across ordinary paper while keeping intended physical size, printer margin, overlap, and image resolution explicit.
 - **Release artifacts:** `dist/index.html` and `dist/index.self-extract.html`.
