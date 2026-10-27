@@ -269,3 +269,7 @@ if (-not $webrtcReadyText.Contains("options.requireReadyChannelOpen!==false&&(!r
 # Keep internal QA/implementation prose out of user-facing help.
 & node (Join-Path $Root "tests/help-copy.test.cjs")
 if ($LASTEXITCODE -ne 0) { throw "User-facing help copy regression failed." }
+
+
+& $nodeCommand.Source (Join-Path $Root "tests/common-ui.test.cjs") "src/index.template.html" "dist/index.html" "large-print-tiler.html" "dist/index.self-extract.html"
+if ($LASTEXITCODE -ne 0) { throw "Common UI full initialization/lifecycle checks failed." }

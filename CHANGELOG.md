@@ -8,6 +8,8 @@
 
 ## Unreleased
 
+- Add common save recovery, native action states, shared language preference, editable calibration filename and independent output errors. Preserve previous tiled PDF after failure and owned translated Undo after source removal.
+
 - Hide the informational page footer at the existing smartphone breakpoint and move the unchanged build information to the end of Help. Preserve native disclosure and dialog dismissal.
 
 - Clarify Japanese and English help by removing internal layout, implementation, and audit commentary while preserving usage guidance and cautions.

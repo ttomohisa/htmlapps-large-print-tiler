@@ -51,10 +51,12 @@ function harness() {
     $: node, translate: key => key, requestAnimationFrame: fn => frameGate ? frameGate.promise.then(fn) : setImmediate(fn),
     document: { createElement: () => ({ width:0, height:0, getContext: () => ({ clearRect(){}, drawImage(){}, getImageData: (_x,_y,w,h) => ({ data: new Uint8Array(w*h*4).fill(255) }) }) }) },
     AppConfirm: { ask: () => confirm.promise },
-    renderDynamic(){}, updateMobileActionBar(){},
+    translations:{en:{},ja:{}},BrowserKittyUI:{setButtonState(el,state){el.disabled=state!=='ready';el.setAttribute('data-bk-state',state);}},
+    renderDynamic(){}, renderCommonUi(){},updateMobileActionBar(){},
     renderSelectedFile: () => vm.runInContext('updateExportState()', context),
     update: () => vm.runInContext('updateExportState()', context),
     clearSourcePreview: () => vm.runInContext('sourcePreviewUrl=null', context),
+    showToastKey(key,vars,options){toasts.push(key);if(options?.onAction)undo=options.onAction;},
     showToast(text, options) { toasts.push(text); if (options?.onAction) undo = options.onAction; },
     downloadBytes(bytes, filename) { downloads.push({ bytes: Buffer.from(bytes), filename }); },
     decodeHook: async () => ({ width: 2, height: 3, close(){} }),
@@ -70,7 +72,7 @@ function harness() {
   run(html.slice(html.indexOf('      const paperPresets'), html.indexOf('      let language')));
   for (const name of ['safeNumber','clamp','getPaperSize','getActivePdfPage','currentSourceDimensions','getCalibrationFactors','calculateLayoutForDimensions','calculateLayout','calculateLayoutForPdfPage','getSelectedPdfPageIndexes','buildPdfExportPlan','pdfPageId','tileId','sanitizeFilenameBase','setDefaultExportFilename','resetExportProgress','setExportProgress','updateExportState','isSupportedFile','applyParsedSourceSize','isSvgFile','parsePngMetadata','parseJpegMetadata','parseCssLengthMm','parseImageSource','tileOverlayCommands','setNumericState','deflateBytes','rasterizeSource','binaryObject','buildTiledImagePdf','assemblyMapPdfCommands','pdfEscapeText','selectFile','removeFile']) run(extract(name));
   // Lifecycle helpers, when present, are exercised through the actual handlers.
-  for (const name of ['invalidateExport','ownsExport','parsePdfPageRange','clearPdfPageRange','syncPdfPageControls','applyPdfPageRange']) if (html.includes(`function ${name}(`)) run(extract(name));
+  for (const name of ['setExportFeedback','clearSourceFeedback','invalidateExport','ownsExport','parsePdfPageRange','clearPdfPageRange','syncPdfPageControls','applyPdfPageRange']) if (html.includes(`function ${name}(`)) run(extract(name));
   run(html.slice(html.indexOf('      function isPdfFile'), html.indexOf('      function buildCalibrationPdf')));
   run('yieldToBrowser=waitHook; decodeImageBitmap=decodeHook;');
   run(html.slice(html.indexOf("      $('#sourceFile').addEventListener"), html.indexOf("      $('#pdfPageList').addEventListener")));

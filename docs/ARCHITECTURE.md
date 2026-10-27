@@ -110,3 +110,14 @@ Keep source in one HTML while it remains understandable. When an app grows subst
 - No runtime external resource.
 - Clear state ownership.
 - A build that fails on missing input.
+
+
+## Common UI conventions
+
+Dimensions, tiling, calibration and overlay settings keep the existing `large-print-tiler:layout-v0.5` autosave schema. The page displays its retention scope, actual save outcome and Retry; only a successful write advances the timestamp. Read/parse failures protect the stored record. Read recovery retains explicit changes, including values deliberately returned to defaults, then saves the merged current layout. Files, page selections, filename drafts and PDF results remain in this tab.
+
+Both tiled and neutral 100 mm calibration PDFs have editable filenames. Completion means **Download started**, not a verified filesystem save. Generating a new tiled result retains the last successful bytes/name; its separate Previous result action remains usable after generation/download failure. A source replacement, removal or confirmed Reset clears that result. Owned Remove Undo restores the fully parsed source and its captured result; an incomplete source is re-read. Reset remains Cancel-first with source/export revision guards. Original input files never change.
+
+Shared fixed v1 buttons use native ready/unavailable/busy/stopping semantics; cancellation remains cooperative. Each storage/language/source/main-output/calibration/previous-output failure has its own recovery state. Language uses valid URL, common preference, read-only legacy preference, ordered browser languages, then English; startup never writes. Explicit switching writes the common preference only. Numeric/page-range drafts, selection, active jobs, focused Undo and confirmation survive translation.
+
+The PDF parsing, tiling, vector/image builders, geometry, calibration bytes and embedded dependencies are unchanged. Browser/OS delivery, PDF preview rendering, physical print size and device geometry require manual acceptance described in `docs/COMMON_UI_ACCEPTANCE.md`.

@@ -1,0 +1,12 @@
+# Common UI acceptance — Large Print Tiler
+
+CLI/VM results do not establish native browser/device acceptance. Run these on readable, root entry and self-extract builds in supported desktop and mobile browsers, offline. Record browser/version/build and result.
+
+1. Change layout/calibration, reload, deny storage and change again. Pass: explicit scope; saved time only after real write; persistent translated failure; current layout stays usable. Restore access and Retry. Pass: latest changed fields, including fields set back to defaults, survive while untouched stored values recover. Corrupt JSON must not be overwritten.
+2. Load multi-page PDF; type incomplete numeric and page-range drafts, filename, and choose pages. Switch languages, including while reading/generating. Pass: drafts/selections stay intact; current labels/status/errors translate; no duplicate jobs or startup preference writes.
+3. Export with edited name, change settings, then deny download or induce generation failure. Pass: native busy/disabled and cancel states, exactly one accepted job, persistent error, old Previous result still saves exact old bytes/name. Retry succeeds and replaces it. Cancel preserves old result. Check browser save destination and that completion only says download started.
+4. Edit calibration filename and save. Pass: neutral 100 mm horizontal/vertical lines independent of correction settings, sanitized edited name, separate delivery failure/retry. Print 100%/Actual size, measure both lines, then apply calibration and check tiled dimensions. Actual paper measurements are required.
+5. Remove source and focus Undo for over five seconds; change language and invoke it. Pass: owned source/selection/name/previous PDF restored, translated action stays available while focused. Replacing the source prevents obsolete Undo. Reset opens Cancel-first; Cancel/Escape/backdrop preserve work; confirm clears only stated source/layout/result.
+6. Narrow/short viewports, keyboard and touch. Pass: no clipping or horizontal overflow from feedback/names; actions accessible, visible focus, target sizes; Help's final build information reachable, close/Escape/backdrop/focus correct; sheet preview/zoom/PDF rendering intact. Verify original vectors/images, all selected pages and assembly map, paper, overlap and printer margins.
+
+Current status: not performed. Managed local browser access is denied by environment policy; no workaround was used.

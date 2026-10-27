@@ -191,3 +191,8 @@ Bug reports and feature proposals are welcome through GitHub Issues. See [CONTRI
 Copyright © 2026 ttomohisa
 
 Licensed under the [MIT License](LICENSE).
+
+
+## Saving and recovery
+
+Layout/calibration settings show autosave status and Retry; files and output PDFs remain in this tab. Edit either output filename before saving. Previous result retains the last successful tiled PDF after a failed attempt, until source replacement, removal or confirmed Reset. Remove Undo restores the source and its result; original files are never changed. Language changes preserve current work. Download started reports browser handoff: check the browser destination.

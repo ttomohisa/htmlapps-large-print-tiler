@@ -113,6 +113,7 @@
       text-overflow: ellipsis;
     }
     .header-actions { flex-shrink: 0; margin-left: auto; display: flex; align-items: center; gap: 12px; }
+    .common-feedback{min-width:0;max-width:100%;overflow-wrap:anywhere;font-size:13px}.common-feedback p:empty,.common-feedback:empty{display:none}.common-feedback button{border-radius:10px;padding:8px 12px;white-space:normal;max-width:100%}
     .language-button {
       min-width: 0;
       padding: 6px 1px;
@@ -731,6 +732,8 @@
       *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
     }
   </style>
+  <style>__BK_UI_CSS__</style>
+  <script data-bk-ui-version="1.0.0">__BK_UI_JS__</script>
 </head>
 <body>
   <header class="app-header">
@@ -743,8 +746,8 @@
         </div>
       </div>
       <div class="header-actions">
-        <button class="language-button" id="languageButton" type="button" aria-label="英語に切り替え" title="英語に切り替え">EN</button>
-        <button class="icon-button header-icon-button" id="helpButton" type="button" data-i18n-title="helpTitle" data-i18n-aria-label="helpTitle" title="使い方と注意事項" aria-label="使い方と注意事項">
+        <button class="language-button" id="languageButton" data-bk-header-action type="button" aria-label="英語に切り替え" title="英語に切り替え">EN</button>
+        <button class="icon-button header-icon-button" id="helpButton" data-bk-header-action type="button" data-i18n-title="helpTitle" data-i18n-aria-label="helpTitle" title="使い方と注意事項" aria-label="使い方と注意事項">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.8 9a2.35 2.35 0 1 1 3.72 1.9c-.92.67-1.52 1.12-1.52 2.1"/><path d="M12 17h.01"/></svg>
         </button>
       </div>
@@ -784,7 +787,13 @@
             <div class="selected-file" id="selectedFile" hidden>
               <div class="file-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v5h5"/></svg></div>
               <div class="file-copy"><p class="file-name" id="fileName"></p><p class="file-meta" id="fileMeta"></p></div>
-              <button class="small-icon-button" id="removeFileButton" type="button" data-i18n-title="removeFile" data-i18n-aria-label="removeFile" title="ファイルを外す" aria-label="ファイルを外す"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+              <button class="small-icon-button" id="removeFileButton" data-bk-button data-bk-variant="secondary" type="button" data-i18n-title="removeFile" data-i18n-aria-label="removeFile" title="ファイルを外す" aria-label="ファイルを外す"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+            </div>
+            <div class="common-feedback">
+              <p id="workRetention" role="status" data-i18n="layoutScope"></p>
+              <p id="layoutSaveStatus"></p><p id="layoutReadNotice" role="status"></p>
+              <button id="retryLayoutSave" type="button" data-bk-button data-bk-variant="secondary" data-i18n="retryLayout" hidden>設定の保存を再試行</button>
+              <p id="languageNotice" role="status" aria-live="polite"></p>
             </div>
             <p class="inline-note" id="sourceNote" data-i18n="sourceNote">PDF・画像・SVGの寸法情報を端末内で読み取ります。物理サイズがない画像は完成サイズを指定してください。</p>
             <div class="pdf-meta" id="pdfMeta" hidden>
@@ -796,14 +805,14 @@
             <div class="pdf-page-selection" id="pdfPageSelection" hidden>
               <div class="pdf-page-selection-head">
                 <p class="pdf-page-selection-title"><span data-i18n="pdfOutputPages">出力ページ</span><strong class="pdf-page-selection-count" id="pdfSelectedPagesValue">—</strong></p>
-                <div class="pdf-page-selection-actions"><button class="button ghost" id="selectAllPdfPages" type="button" data-i18n="selectAllPages">すべて選択</button><button class="button ghost" id="clearPdfPages" type="button" data-i18n="clearPages">すべて解除</button></div>
+                <div class="pdf-page-selection-actions"><button class="button ghost" id="selectAllPdfPages" data-bk-button data-bk-variant="secondary" type="button" data-i18n="selectAllPages">すべて選択</button><button class="button ghost" id="clearPdfPages" data-bk-button data-bk-variant="secondary" type="button" data-i18n="clearPages">すべて解除</button></div>
               </div>
               <p class="pdf-page-selection-note" data-i18n="pdfOutputPagesNote">チェックしたページだけを出力します。ページ名を押すと右側のプレビュー対象を切り替えます。</p>
               <div class="pdf-page-range">
                 <label class="pdf-page-range-label" for="pdfPageRange" data-i18n="pdfPageRangeLabel">ページ範囲で選択</label>
                 <div class="pdf-page-range-controls">
                   <input class="pdf-page-range-input" id="pdfPageRange" type="text" placeholder="1-3, 5" autocomplete="off" spellcheck="false" aria-describedby="pdfPageRangeHint pdfPageRangeError" aria-invalid="false">
-                  <button class="button" id="applyPdfPageRange" type="button" data-i18n="pdfPageRangeApply">適用</button>
+                  <button class="button" id="applyPdfPageRange" data-bk-button data-bk-variant="secondary" type="button" data-i18n="pdfPageRangeApply">適用</button>
                 </div>
                 <p class="pdf-page-selection-note" id="pdfPageRangeHint" data-i18n="pdfPageRangeHint">例: 1-3, 5。半角の数字・カンマ・ハイフンで指定し、適用すると選択を置き換えます。</p>
                 <p class="pdf-page-range-error" id="pdfPageRangeError" role="status" hidden></p>
@@ -882,7 +891,11 @@
               <div class="calibration-content">
                 <div class="calibration-head">
                   <p class="calibration-note" data-i18n="calibrationBody">100 mmの基準線を印刷して実測値を入力すると、プリンターのX/Y方向の縮尺誤差を補正します。</p>
-                  <button class="button ghost" id="downloadCalibrationPdf" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg><span data-i18n="downloadCalibration">100 mm校正PDFを保存</span></button>
+                  <label for="calibrationFilename" data-i18n="calibrationFilename">校正PDFのファイル名</label>
+                  <input id="calibrationFilename" type="text" maxlength="140" aria-describedby="calibrationScope">
+                  <p id="calibrationScope" class="inline-note" data-i18n="calibrationScope"></p>
+                  <p id="calibrationStatus" role="status" aria-live="polite"></p>
+                  <button class="button ghost" id="downloadCalibrationPdf" data-bk-button data-bk-variant="secondary" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg><span data-i18n="downloadCalibration">100 mm校正PDFを保存</span></button>
                 </div>
                 <p class="calibration-print-note" data-i18n="calibrationPrintNote">校正PDFは「100% / 実際のサイズ」で印刷し、「ページに合わせる」などの自動拡大縮小をOFFにしてください。</p>
                 <div class="calibration-grid">
@@ -903,7 +916,7 @@
                 <label class="assembly-check"><input id="showTileLabels" type="checkbox"><span data-i18n="tileLabels">ページID</span></label>
               </div>
             </div>
-            <div class="panel-actions"><button class="button ghost" id="resetButton" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4v6h6"/><path d="M5.5 15a7 7 0 1 0 1.2-7.7L4 10"/></svg><span data-i18n="reset">初期設定に戻す</span></button></div>
+            <div class="panel-actions"><button class="button ghost" id="resetButton" data-bk-button data-bk-variant="secondary" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4v6h6"/><path d="M5.5 15a7 7 0 1 0 1.2-7.7L4 10"/></svg><span data-i18n="reset">初期設定に戻す</span></button></div>
           </div>
         </section>
       </div>
@@ -948,15 +961,21 @@
             <p class="export-copy" data-i18n="exportBody">PDFはベクターを保ったまま、画像は元ピクセルを保ったまま、用紙ごとの分割PDFを生成します。複数ページPDFではチェックしたページだけを順番に出力します。</p>
             <label class="export-name-field"><span data-i18n="exportFilename">保存ファイル名</span><span class="export-filename-wrap"><input class="export-filename" id="exportFilename" type="text" maxlength="120" value="large-print-tiler-tiled" autocomplete="off" spellcheck="false"><span class="export-filename-suffix">.pdf</span></span></label>
             <div class="export-actions">
-              <button class="button primary" id="exportPdfButton" type="button" disabled>
+              <button class="button primary" id="exportPdfButton" data-bk-button data-bk-variant="primary" type="button" disabled>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m8 11 4 4 4-4"/><path d="M5 19h14"/></svg>
                 <span data-i18n="exportPdf">分割PDFを保存</span>
               </button>
             </div>
             <div class="export-progress" id="exportProgress" hidden>
-              <div class="export-progress-head"><span class="export-progress-text" id="exportProgressText">0 / 0</span><button class="button ghost" id="cancelExportButton" type="button" data-i18n="cancelExport">生成をキャンセル</button></div>
+              <div class="export-progress-head"><span class="export-progress-text" id="exportProgressText">0 / 0</span><button class="button ghost" id="cancelExportButton" data-bk-button data-bk-variant="secondary" type="button" data-i18n="cancelExport">生成をキャンセル</button></div>
               <progress id="exportProgressBar" max="1" value="0"></progress>
             </div>
+            <p class="common-feedback" id="outputScope" data-i18n="outputScope"></p>
+            <p class="common-feedback" id="sourceRecovery" role="status" aria-live="polite"></p>
+            <p class="common-feedback" id="exportRecovery" role="status" aria-live="polite"></p>
+            <p class="common-feedback" id="previousOutput"></p>
+            <button class="button ghost" id="savePreviousOutput" data-bk-button data-bk-variant="secondary" type="button" data-i18n="savePrevious" hidden></button>
+            <p class="common-feedback" id="previousRecovery" role="status" aria-live="polite"></p>
             <div class="export-status" id="exportStatus" role="status" aria-live="polite"></div>
           </div>
         </div>
@@ -968,15 +987,15 @@
   <footer><span id="footerName">Large Print Tiler</span> · MIT License · <span data-i18n="footer">単一HTML・実行時外部通信なし</span></footer>
 
   <div class="mobile-action-bar" id="mobileActionBar" data-visible="false" aria-hidden="true">
-    <button class="mobile-action-preview" id="mobilePreviewButton" type="button"><span class="mobile-action-summary" id="mobileActionSummary">—</span><span class="mobile-action-preview-label" data-i18n="mobilePreview">プレビューを見る</span></button>
-    <button class="mobile-action-save" id="mobileExportButton" type="button" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m8 11 4 4 4-4"/><path d="M5 19h14"/></svg><span data-i18n="mobileSave">PDF保存</span></button>
+    <button class="mobile-action-preview" id="mobilePreviewButton" data-bk-button data-bk-variant="secondary" type="button"><span class="mobile-action-summary" id="mobileActionSummary">—</span><span class="mobile-action-preview-label" data-i18n="mobilePreview">プレビューを見る</span></button>
+    <button class="mobile-action-save" id="mobileExportButton" data-bk-button data-bk-variant="primary" type="button" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m8 11 4 4 4-4"/><path d="M5 19h14"/></svg><span data-i18n="mobileSave">PDF保存</span></button>
   </div>
 
-  <div class="app-toast" id="appToast" role="status" aria-live="polite" aria-atomic="true" data-tone="default"><span class="app-toast-message" id="appToastMessage"></span><button class="app-toast-action" id="appToastAction" type="button" hidden></button></div>
+  <div class="app-toast" id="appToast" role="status" aria-live="polite" aria-atomic="true" data-tone="default"><span class="app-toast-message" id="appToastMessage"></span><button class="app-toast-action" id="appToastAction" data-bk-button data-bk-variant="secondary" type="button" hidden></button></div>
 
   <dialog class="app-confirm-dialog" id="appConfirmDialog" aria-labelledby="appConfirmTitle" aria-describedby="appConfirmMessage">
-    <div class="app-confirm-header"><h2 class="app-confirm-title" id="appConfirmTitle">確認</h2><button class="app-confirm-close" id="appConfirmClose" type="button" data-i18n-aria-label="close" aria-label="閉じる"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
-    <div class="app-confirm-body"><p class="app-confirm-message" id="appConfirmMessage"></p><div class="app-confirm-actions"><button class="app-confirm-button" id="appConfirmCancel" type="button">キャンセル</button><button class="app-confirm-button primary" id="appConfirmOk" type="button">実行する</button></div></div>
+    <div class="app-confirm-header"><h2 class="app-confirm-title" id="appConfirmTitle">確認</h2><button class="app-confirm-close" id="appConfirmClose" data-bk-header-action type="button" data-i18n-aria-label="close" aria-label="閉じる"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+    <div class="app-confirm-body"><p class="app-confirm-message" id="appConfirmMessage"></p><div class="app-confirm-actions"><button class="app-confirm-button" id="appConfirmCancel" data-bk-button data-bk-variant="secondary" type="button">キャンセル</button><button class="app-confirm-button primary" id="appConfirmOk" data-bk-button data-bk-variant="danger" type="button">実行する</button></div></div>
   </dialog>
 
   <dialog class="tile-preview-dialog" id="tilePreviewDialog" aria-labelledby="tilePreviewTitle">
@@ -986,20 +1005,23 @@
   </dialog>
 
   <dialog id="helpDialog" aria-labelledby="helpTitle">
-    <div class="dialog-header"><h2 id="helpTitle" data-i18n="helpTitle">使い方と注意事項</h2><button class="icon-button" id="closeHelpButton" type="button" data-i18n-title="close" data-i18n-aria-label="close" title="閉じる" aria-label="閉じる"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><path d="m7 7 10 10M17 7 7 17"/></svg></button></div>
+    <div class="dialog-header"><h2 id="helpTitle" data-i18n="helpTitle">使い方と注意事項</h2><button class="icon-button" id="closeHelpButton" data-bk-header-action type="button" data-i18n-title="close" data-i18n-aria-label="close" title="閉じる" aria-label="閉じる"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><path d="m7 7 10 10M17 7 7 17"/></svg></button></div>
     <div class="dialog-body">
       <!-- APP:HELP:BEGIN -->
       <h3 data-i18n="helpBasicsTitle">基本操作</h3>
       <p data-i18n="helpDialogs">個別プレビューのズームはキーボードでも操作できます。背景をクリックするとプレビューを閉じられます。</p>
 
       <ol><li data-i18n="helpStep1">PDFはCropBox / MediaBoxと回転、画像はピクセル数と解像度情報、SVGはwidth / height / viewBoxを読み取ります。</li><li data-i18n="helpStep2">完成サイズの指定方法、用紙、向き、プリンター余白、重なりを設定します。</li><li data-i18n="helpStep3">右側のプレビューで分割位置・必要枚数・画像の実効解像度を確認し、分割PDFを保存できます。</li></ol>
-      <p data-i18n="helpSourceLifecycle">生成中はファイルの選択・削除とページの選択・切り替えを一時停止します。読み込み中に削除したファイルも「元に戻す」で再読み込みできます。</p>
+      <p data-i18n="helpSourceLifecycle">生成中はファイルの選択・取り除きとページの選択・切り替えを一時停止します。読み込み中に取り除いたファイルも「元に戻す」で再読み込みできます。</p>
       <p data-i18n="helpPageRange">ページ範囲（例: 1-3, 5）を入力し「適用」またはEnterで出力ページの選択を置き換えます。重複はまとめ、元のページ順に出力します。入力だけでは選択は変わらず、不正な範囲も選択を変更しません。適用後、ファイル変更、リセット、元に戻す操作で入力欄を空にします。</p>
       <h3 data-i18n="helpPrivacyTitle">プライバシー</h3>
       <p data-i18n="helpPrivacyBody">選択したファイルと設定はブラウザー内で扱われ、このアプリから外部サーバーへ送信されません。設定値だけを端末内へ保存する場合があります。</p>
       <h3 data-i18n="helpNotesTitle">注意事項</h3>
       <ul><li data-i18n="helpNotePrint">校正時も本番印刷時も「100% / 実際のサイズ」で印刷し、「ページに合わせる」等の自動拡大縮小をOFFにしてください。</li><li data-i18n="helpNoteBrowser">大きなファイル処理はブラウザーや端末のメモリ制限を受けます。ファイルの内容や端末の空きメモリによっては処理できない場合があります。</li></ul>
       <p class="dialog-note" data-i18n="helpOffline">配布用HTMLは単体で開ける構成を維持し、実行時の外部通信を行いません。</p>
+      <p data-i18n="helpCommonSave"></p>
+      <p data-i18n="helpCommonOutput"></p>
+      <p data-i18n="helpCommonRemove"></p>
       <!-- APP:HELP:END -->
     <section class="build-section">
       <details>
@@ -1106,8 +1128,8 @@
           summaryFinished: '完成サイズ', summaryPaper: '用紙', summaryGrid: '分割', summarySheets: '必要枚数', summarySheetsSub: '余白・重なりを考慮', summarySheetsMulti: '{page} · 選択 {selected} / {total}ページ · タイル合計 {count}枚', printable: '印刷可能', printableCalibrated: '補正後の実効範囲', rowsCols: '{cols}列 × {rows}行', sheetsCount: '{count}枚', overlapValue: '重なり {value} mm', legendTile: '用紙範囲', legendOverlap: '重なり', legendTrim: '切り取り位置',
           modeSummaryOriginal: '元サイズ', modeSummaryFinished: '指定サイズ', modeSummarySheets: '枚数から算出', calcNote: '分割数は「印刷可能範囲 − 重なり」を次の用紙へ進む幅として計算します。', exportBody: 'PDFはベクターを保ったまま、画像は元ピクセルを保ったまま分割PDFを生成します。複数ページPDFではチェックしたページだけを順番に出力します。', exportFilename: '保存ファイル名', exportPdf: '分割PDFを保存', exportReady: '分割して保存できます。', exportNeedPdf: '対応ファイルを選ぶと分割PDFを保存できます。', exportNeedPages: '出力するPDFページを1ページ以上選択してください。', exportWorking: '分割PDFを生成しています…', exportProgress: '{done} / {total} ページを準備', cancelExport: '生成をキャンセル', exportCancelling: '生成をキャンセルしています…', exportCancelled: 'PDF生成をキャンセルしました。', exportDone: '{count}ページの分割PDFを保存しました。', imageReading: '画像を読み取っています…', imageReadDone: '画像情報を読み取りました。', imageReadError: 'この画像を読み取れませんでした。別のファイルで試してください。', imageNoPhysical: 'この画像には印刷サイズの情報がありません。完成サイズを指定してください。', imagePhysicalMetadata: '埋め込み解像度から算出', imagePhysicalCss: 'CSS 96 px/in 基準', imagePhysicalUnknown: '情報なし', imageOutputRaster: '元ピクセルを維持', imageOutputSvgRaster: 'SVGを画像化', ppiHigh: '高精細', ppiPrint: '印刷向け', ppiPoster: '大型掲示向け', ppiLow: '粗く見える可能性', ppiVector: 'ベクター入力', pdfReading: 'PDFを読み取っています…', pdfReadDone: 'PDFの{count}ページを読み取りました。', pdfReadError: 'このPDFは現在の読み取り方式では解析できませんでした。別のPDFで試してください。', pdfEncrypted: '暗号化・パスワード保護されたPDFにはこのバージョンでは対応していません。', pdfUnsupportedContents: 'このPDFのページ内容は現在の分割出力方式では扱えません。', pdfExportError: '分割PDFを生成できませんでした。',
           errorPositiveSize: '幅と高さは0より大きい値にしてください。', errorMargin: 'プリンター余白が大きすぎて印刷可能範囲がなくなっています。', errorOverlap: '重なりは印刷可能な幅・高さより小さくしてください。', errorSheets: '用紙枚数は1以上の整数にしてください。', warningManySheets: 'この設定では{count}枚必要です。入力値を確認してください。',
-          helpDialogs: "個別プレビューのズームはキーボードでも操作できます。背景をクリックするとプレビューを閉じられます。", helpPageRange: 'ページ範囲（例: 1-3, 5）を入力し「適用」またはEnterで出力ページの選択を置き換えます。重複はまとめ、元のページ順に出力します。入力だけでは選択は変わらず、不正な範囲も選択を変更しません。適用後、ファイル変更、リセット、元に戻す操作で入力欄を空にします。', helpBasicsTitle: '基本操作', helpStep1: 'PDFは各ページのCropBox / MediaBoxと回転を読み取り、出力するページを選択できます。画像はピクセル数と解像度情報、SVGはwidth / height / viewBoxを読み取ります。', helpStep2: '完成サイズの指定方法、用紙、向き、プリンター余白、重なりを設定します。', helpStep3: '右側のプレビューでページごとの分割位置・必要枚数を確認し、進捗を見ながら分割PDFを保存できます。', helpSourceLifecycle: '生成中はファイルの選択・削除とページの選択・切り替えを一時停止します。読み込み中に削除したファイルも「元に戻す」で再読み込みできます。', helpPrivacyTitle: 'プライバシー', helpPrivacyBody: '選択したファイルと設定はブラウザー内で扱われ、このアプリから外部サーバーへ送信されません。設定値だけを端末内へ保存する場合があります。', helpNotesTitle: "注意事項",  helpNotePrint: '校正時も本番印刷時も、プリンタードライバーやPDFビューアー側の「ページに合わせる」等をOFFにし、100% / 実際のサイズで印刷してください。', helpNoteBrowser: '大きなファイル処理はブラウザーや端末のメモリ制限を受けます。ファイルの内容や端末の空きメモリによっては処理できない場合があります。', helpOffline: '配布用HTMLは単体で開ける構成を維持し、実行時の外部通信を行いません。',
-          buildInfo: 'ビルド情報', appVersion: 'アプリバージョン', builtAt: '生成日時', dependencies: '内包依存数', footer: '単一HTML・実行時外部通信なし', confirmTitle: '確認', confirmAction: '実行する', cancel: 'キャンセル', resetTitle: '初期設定に戻しますか？', resetMessage: '選択したファイルを外し、寸法と用紙設定を初期状態へ戻します。', resetConfirm: '初期設定に戻す', resetDone: '初期設定に戻しました', fileSelected: 'ファイルを選択しました。', unsupportedFile: 'この形式は選択できません。PDF / PNG / JPEG / WebP / SVGを選んでください。', fileRemoved: 'ファイルを外しました', undo: '元に戻す', fileRestored: 'ファイルを戻しました', mobilePreview: 'プレビューを見る', mobileSave: 'PDF保存', mobileCancel: 'キャンセル', mobileSummary: '{count}枚 · {paper}', mobileProgress: '{done}/{total}ページ生成中'
+          helpDialogs: "個別プレビューのズームはキーボードでも操作できます。背景をクリックするとプレビューを閉じられます。", helpPageRange: 'ページ範囲（例: 1-3, 5）を入力し「適用」またはEnterで出力ページの選択を置き換えます。重複はまとめ、元のページ順に出力します。入力だけでは選択は変わらず、不正な範囲も選択を変更しません。適用後、ファイル変更、リセット、元に戻す操作で入力欄を空にします。', helpBasicsTitle: '基本操作', helpStep1: 'PDFは各ページのCropBox / MediaBoxと回転を読み取り、出力するページを選択できます。画像はピクセル数と解像度情報、SVGはwidth / height / viewBoxを読み取ります。', helpStep2: '完成サイズの指定方法、用紙、向き、プリンター余白、重なりを設定します。', helpStep3: '右側のプレビューでページごとの分割位置・必要枚数を確認し、進捗を見ながら分割PDFを保存できます。', helpSourceLifecycle: '生成中はファイルの選択・取り除きとページの選択・切り替えを一時停止します。読み込み中に取り除いたファイルも「元に戻す」で再読み込みできます。', helpPrivacyTitle: 'プライバシー', helpPrivacyBody: '選択したファイルと設定はブラウザー内で扱われ、このアプリから外部サーバーへ送信されません。設定値だけを端末内へ保存する場合があります。', helpNotesTitle: "注意事項",  helpNotePrint: '校正時も本番印刷時も、プリンタードライバーやPDFビューアー側の「ページに合わせる」等をOFFにし、100% / 実際のサイズで印刷してください。', helpNoteBrowser: '大きなファイル処理はブラウザーや端末のメモリ制限を受けます。ファイルの内容や端末の空きメモリによっては処理できない場合があります。', helpOffline: '配布用HTMLは単体で開ける構成を維持し、実行時の外部通信を行いません。',
+          buildInfo: 'ビルド情報', appVersion: 'アプリバージョン', builtAt: '生成日時', dependencies: '内包依存数', footer: '単一HTML・実行時外部通信なし', confirmTitle: '確認', confirmAction: '実行する', cancel: 'キャンセル', resetTitle: '初期設定に戻しますか？', resetMessage: '選択したファイルと前回の出力をこのタブから外し、寸法・用紙・校正・表示設定を初期状態へ戻します。元ファイルは変更しません。', resetConfirm: '初期設定に戻す', resetDone: '初期設定に戻しました', fileSelected: 'ファイルを選択しました。', unsupportedFile: 'この形式は選択できません。PDF / PNG / JPEG / WebP / SVGを選んでください。', fileRemoved: 'ファイルを外しました', undo: '元に戻す', fileRestored: 'ファイルを戻しました', mobilePreview: 'プレビューを見る', mobileSave: 'PDF保存', mobileCancel: 'キャンセル', mobileSummary: '{count}枚 · {paper}', mobileProgress: '{done}/{total}ページ生成中'
         },
         en: {
           brandMeta: 'Physical-size tiling · Fully local', helpTitle: 'How to use & notes', close: 'Close', introTitle: 'Split large PDFs and images across ordinary paper', lead: 'Check the finished size, printer margins, and overlap while calculating how many sheets are needed for assembly.', localBadge: 'Fully local processing',
@@ -1120,10 +1142,12 @@
           modeSummaryOriginal: 'Source size', modeSummaryFinished: 'Explicit size', modeSummarySheets: 'Derived from sheets', calcNote: 'Tile count advances each next sheet by “printable area − overlap”.', exportBody: 'PDFs keep vector content, while raster images keep their source pixels. For multi-page PDFs, only checked source pages are exported in order.', exportFilename: 'Save filename', exportPdf: 'Save tiled PDF', exportReady: 'Ready to split and save.', exportNeedPdf: 'Choose a supported file to enable tiled PDF export.', exportNeedPages: 'Select at least one PDF page to export.', exportWorking: 'Generating tiled PDF…', exportProgress: 'Preparing page {done} / {total}', cancelExport: 'Cancel generation', exportCancelling: 'Cancelling generation…', exportCancelled: 'PDF generation cancelled.', exportDone: 'Saved a {count}-page tiled PDF.', imageReading: 'Reading image…', imageReadDone: 'Read image information.', imageReadError: 'This image could not be read. Try another file.', imageNoPhysical: 'This image has no physical-size metadata. Set the finished size explicitly.', imagePhysicalMetadata: 'From embedded resolution', imagePhysicalCss: 'CSS 96 px/in basis', imagePhysicalUnknown: 'Not available', imageOutputRaster: 'Source pixels preserved', imageOutputSvgRaster: 'SVG rasterized', ppiHigh: 'High detail', ppiPrint: 'Print-ready', ppiPoster: 'Large-display range', ppiLow: 'May look coarse', ppiVector: 'Vector source', pdfReading: 'Reading PDF…', pdfReadDone: 'Read {count} PDF pages.', pdfReadError: 'This PDF could not be parsed by the current reader. Try another PDF.', pdfEncrypted: 'Encrypted or password-protected PDFs are not supported in this version.', pdfUnsupportedContents: 'This page content cannot be handled by the current tile-export method.', pdfExportError: 'Could not generate the tiled PDF.',
           errorPositiveSize: 'Width and height must be greater than zero.', errorMargin: 'The printer margin leaves no printable area.', errorOverlap: 'Overlap must be smaller than both printable dimensions.', errorSheets: 'Sheet counts must be integers of 1 or more.', warningManySheets: 'This setup needs {count} sheets. Check the input values.',
           helpDialogs: "Use the keyboard to adjust sheet-preview zoom. Click outside the preview to close it.", helpPageRange: 'Enter a page range (for example, 1-3, 5) and choose Apply or press Enter to replace the output selection. Duplicates export once in source order. Typing or an invalid range leaves the selection unchanged. Applying a range, changing the source, Reset, and Undo clear the draft.', helpBasicsTitle: 'Basics', helpStep1: 'PDF reads CropBox / MediaBox and rotation for each page, and lets you choose which pages to export. Images read pixel/resolution metadata; SVG reads width / height / viewBox.', helpStep2: 'Choose the sizing mode, paper, orientation, printer margin, and overlap.', helpStep3: 'Use the preview to check per-page tile positions and sheet counts, then save the tiled PDF while following export progress.', helpSourceLifecycle: 'File selection/removal and page selection/preview controls pause during export. Undo re-reads a file that was removed before loading finished.', helpPrivacyTitle: 'Privacy', helpPrivacyBody: 'Selected files and settings are handled in the browser and are not sent to an external server by this app. Only setting values may be stored locally.', helpNotesTitle: "Notes",  helpNotePrint: 'For both calibration and final printing, disable “Fit to page” or similar scaling and print at 100% / Actual size.', helpNoteBrowser: 'Large-file processing is subject to browser/device memory limits. Some files may not complete depending on their contents and the memory available on the device.', helpOffline: 'The distributed HTML remains directly openable and performs no runtime external network request.',
-          buildInfo: 'Build information', appVersion: 'App version', builtAt: 'Built at', dependencies: 'Embedded dependencies', footer: 'Single HTML · No runtime network', confirmTitle: 'Confirm', confirmAction: 'Continue', cancel: 'Cancel', resetTitle: 'Reset settings?', resetMessage: 'Remove the selected file and restore the default document, paper, margin, and overlap values.', resetConfirm: 'Reset', resetDone: 'Settings reset', fileSelected: 'File selected.', unsupportedFile: 'Unsupported file type. Choose PDF, PNG, JPEG, WebP, or SVG.', fileRemoved: 'File removed', undo: 'Undo', fileRestored: 'File restored', mobilePreview: 'View preview', mobileSave: 'Save PDF', mobileCancel: 'Cancel', mobileSummary: '{count} sheets · {paper}', mobileProgress: 'Generating {done}/{total}'
+          buildInfo: 'Build information', appVersion: 'App version', builtAt: 'Built at', dependencies: 'Embedded dependencies', footer: 'Single HTML · No runtime network', confirmTitle: 'Confirm', confirmAction: 'Continue', cancel: 'Cancel', resetTitle: 'Reset settings?', resetMessage: 'Remove the selected file and previous result from this tab, and restore all dimension, paper, calibration and overlay settings. Original files are unchanged.', resetConfirm: 'Reset', resetDone: 'Settings reset', fileSelected: 'File selected.', unsupportedFile: 'Unsupported file type. Choose PDF, PNG, JPEG, WebP, or SVG.', fileRemoved: 'File removed', undo: 'Undo', fileRestored: 'File restored', mobilePreview: 'View preview', mobileSave: 'Save PDF', mobileCancel: 'Cancel', mobileSummary: '{count} sheets · {paper}', mobileProgress: 'Generating {done}/{total}'
         }
       };
 
+      Object.assign(translations.en,{retryLayout:'Retry saving settings',layoutScope:'Only dimensions, layout and calibration settings are autosaved in this browser. Files and page selections stay in this tab.',layoutReadFailed:'Stored settings could not be read. Current work stays available. Retry after storage is available or the stored data is repaired.'});
+      Object.assign(translations.ja,{retryLayout:'設定の保存を再試行',layoutScope:'寸法・分割・校正設定だけをこのブラウザーに自動保存します。ファイルとページ選択はこのタブ内に保持されます。',layoutReadFailed:'保存済みの設定を読み取れませんでした。現在の作業は続けられます。保存領域が利用可能になるか、保存データの修復後に再試行してください。'});
       const $ = selector => document.querySelector(selector);
       const $$ = selector => [...document.querySelectorAll(selector)];
       const SVG_NS = 'http://www.w3.org/2000/svg';
@@ -1149,7 +1173,18 @@
       let exportCancelRequested = false;
       let activeExport = null;
       let exportSequence = 0;
-      let language = readStorage(storageKeys.language) || detectLanguage();
+      Object.assign(translations.en,{calibrationFilename:'Calibration PDF filename',calibrationScope:'Save the neutral 100 mm reference PDF; correction settings are not applied.',downloadFailed:'Could not start the download. Try saving the same output again.'});
+      Object.assign(translations.ja,{calibrationFilename:'校正PDFのファイル名',calibrationScope:'補正を適用しない100 mmの基準PDFを保存します。',downloadFailed:'保存を開始できませんでした。同じ出力の保存を再試行してください。'});
+      Object.assign(translations.en,{helpCommonSave:'Dimensions, tiling and calibration settings are autosaved in this browser. Files, page selections and output PDFs remain only in this tab. A saving error leaves your work available: retry after storage recovers. Unreadable stored settings are protected until they can be read again.',helpCommonOutput:'Edit the tiled-PDF or calibration-PDF filename before saving. Download started means the browser accepted the download; check its destination. Previous result saves the last successfully generated PDF with its original filename and settings, even if a later attempt fails. Calibration always exports a neutral 100 mm reference.',helpCommonRemove:'Remove only detaches the source from this tab; the original file is unchanged. Undo restores the detached source and its previous result. Reset requires confirmation and clears the source, previous result and layout settings. Language changes preserve current work.'});
+      Object.assign(translations.ja,{helpCommonSave:'寸法・分割・校正設定はこのブラウザーに自動保存します。ファイル・ページ選択・出力PDFはこのタブ内だけに保持します。保存に失敗しても作業は続けられます。保存領域が使えるようになってから再試行してください。読み取れない保存設定は、読み取れるまで上書きしません。',helpCommonOutput:'分割PDFと校正PDFは、保存前にファイル名を変更できます。「保存を開始」はブラウザーへの受け渡しを表すため、保存先を確認してください。「前回の出力」は、その後の生成が失敗しても直前に成功したPDFを生成時の名前と設定で保存します。校正PDFは常に補正なしの100 mm基準です。',helpCommonRemove:'「外す」はこのタブからの取り除きで、元ファイルは変更しません。「元に戻す」で元ファイルと前回の出力を復元できます。リセットは確認後にファイル・前回の出力・設定を初期化します。言語を切り替えても現在の作業は保持します。'});
+      const ui=BrowserKittyUI;
+      let calibrationBusy=false,calibrationDelivery={error:false,name:''};
+      let lastTiledResult=null,exportError='',previousError='',sourceFeedback='',sourceError='',exportFeedback=null;
+      Object.assign(translations.en,{outputScope:'Export all tiles of the selected source pages and the optional assembly map. The previous successful output stays in this tab until source replacement, removal or reset.',previousOutput:'Previous result: {name}. It contains the settings used when generated.',savePrevious:'Save previous result again',previousStarted:'Download started: {name}',exportDone:'Download started for the {count}-page tiled PDF.',pdfExportError:'Could not generate or download the tiled PDF. Try Save tiled PDF again.'});
+      Object.assign(translations.ja,{outputScope:'選択した元ページの全タイルと、指定した場合は組み立て図を出力します。前回の出力はファイルの差し替え・取り除き・リセットまでこのタブに保持します。',previousOutput:'前回の出力: {name}。生成時の設定を含みます。',savePrevious:'前回の出力をもう一度保存',previousStarted:'保存を開始しました: {name}',exportDone:'{count}ページの分割PDFの保存を開始しました。',pdfExportError:'分割PDFの生成または保存を開始できませんでした。「分割PDFを保存」で再試行してください。'});
+      let layoutSaveState='dirty',layoutSavedTime='',layoutReadBlocked=false,languageFailure=false;
+      let layoutObserved={...state};const layoutTouched=new Set();
+      let language = ui.resolveLanguage({legacyKeys:[storageKeys.language]});
       // Standard output filename contract marker used by repository checks.
       const outputFilename = `${APP_CONFIG.slug}-tiled`;
       void outputFilename;
@@ -1303,11 +1338,32 @@
         while (value >= 1024 && unit < units.length - 1) { value /= 1024; unit += 1; }
         return `${new Intl.NumberFormat(language, { maximumFractionDigits: unit === 0 ? 0 : 1 }).format(value)} ${units[unit]}`;
       }
+      function renderCommonUi(){
+        ui.setSaveStatus($('#layoutSaveStatus'),{mode:'autosave',state:layoutSaveState,language,time:layoutSavedTime});
+        $('#layoutReadNotice').textContent=layoutReadBlocked?translate('layoutReadFailed'):'';
+        $('#retryLayoutSave').hidden=layoutSaveState!=='error';
+        $('#languageNotice').textContent=languageFailure?ui.text('languageSessionOnly',language):'';
+        $('#calibrationStatus').textContent=calibrationDelivery.error?translate('downloadFailed'):calibrationDelivery.name?ui.text('downloadStarted',language)+': '+calibrationDelivery.name:'';
+        ui.setButtonState($('#downloadCalibrationPdf'),calibrationBusy?'busy':exportInProgress?'unavailable':'ready');
+        $('#calibrationFilename').disabled=calibrationBusy||exportInProgress;
+        $('#sourceNote').textContent=translate(sourceFeedback || (imageSource && !imageSource.physicalKnown?'imageNoPhysical':'sourceNote'));
+        $('#sourceRecovery').textContent=sourceError?translate(sourceError):'';
+        $('#exportRecovery').textContent=exportError?translate(exportError):'';
+        $('#previousRecovery').textContent=previousError?translate(previousError):'';
+        $('#previousOutput').textContent=lastTiledResult?translate('previousOutput',{name:lastTiledResult.filename}):'';
+        $('#savePreviousOutput').hidden=!lastTiledResult;
+        ui.setButtonState($('#savePreviousOutput'),lastTiledResult?'ready':'unavailable');
+        if(exportFeedback)$('#exportStatus').textContent=translate(exportFeedback.key,exportFeedback.vars);
+        if(!$('#exportProgress').hidden)$('#exportProgressText').textContent=translate('exportProgress',{done:$('#exportProgressBar').value,total:$('#exportProgressBar').max});
+      }
+      function setExportFeedback(key,vars={}){exportFeedback={key,vars};$('#exportStatus').textContent=translate(key,vars);}
+      function clearSourceFeedback(){lastTiledResult=null;exportError='';previousError='';sourceFeedback='';sourceError='';exportFeedback=null;}
       function loadState() {
-        const raw = readStorage(storageKeys.layout);
-        if (!raw) return;
         try {
+          const raw=localStorage.getItem(storageKeys.layout);
+          if(raw===null){layoutReadBlocked=false;layoutSaveState='dirty';return true;}
           const parsed = JSON.parse(raw);
+          if(!parsed || typeof parsed!=='object' || Array.isArray(parsed))throw Error('Invalid stored layout');
           state = {
             ...defaultState,
             sourceWidth: clamp(safeNumber(parsed.sourceWidth, defaultState.sourceWidth), 1, 100000),
@@ -1330,33 +1386,54 @@
             showTileLabels: parsed.showTileLabels !== false,
             includeAssemblyMap: parsed.includeAssemblyMap !== false
           };
-        } catch { state = { ...defaultState }; }
+          layoutReadBlocked=false;
+          layoutSaveState=Object.keys(defaultState).every(key=>parsed[key]===state[key])?'saved':'dirty';
+          layoutObserved={...state};return true;
+        } catch {layoutReadBlocked=true;layoutSaveState='error';return false;}
       }
-      function saveState() { writeStorage(storageKeys.layout, JSON.stringify(state)); }
+      function saveState() {
+        for(const key of Object.keys(defaultState))if(state[key]!==layoutObserved[key])layoutTouched.add(key);
+        layoutObserved={...state};
+        if(layoutReadBlocked){layoutSaveState='error';renderCommonUi();return;}
+        try{layoutSaveState='saving';renderCommonUi();localStorage.setItem(storageKeys.layout,JSON.stringify(state));layoutSaveState='saved';layoutSavedTime=new Date().toLocaleTimeString(language,{hour:'2-digit',minute:'2-digit',second:'2-digit'});layoutTouched.clear();}
+        catch{layoutSaveState='error';}
+        renderCommonUi();
+      }
+      $('#retryLayoutSave').addEventListener('click',()=>{
+        if(layoutReadBlocked){const current={...state},touched=[...layoutTouched];if(!loadState()){renderCommonUi();return;}for(const key of touched)state[key]=current[key];}
+        saveState();update({save:false});
+      });
 
       const AppConfirm = (() => {
         const dialog = $('#appConfirmDialog'); const title = $('#appConfirmTitle'); const message = $('#appConfirmMessage'); const closeButton = $('#appConfirmClose'); const cancelButton = $('#appConfirmCancel'); const okButton = $('#appConfirmOk');
-        let resolver = null; let restoreFocus = null;
-        function finish(result) { if (!dialog.open) return; const currentResolver = resolver; resolver = null; dialog.close(); if (restoreFocus instanceof HTMLElement && restoreFocus.isConnected) restoreFocus.focus({ preventScroll: true }); restoreFocus = null; if (currentResolver) currentResolver(result); }
-        function ask({ title: heading, message: body, confirmLabel, cancelLabel, tone = 'default' } = {}) {
-          if (dialog.open) finish(false);
+        let resolver = null; let restoreFocus = null; let activeCopy=null;
+        function finish(result) { if (!dialog.open) return; const currentResolver = resolver; resolver = null; activeCopy=null; dialog.close(); if (restoreFocus instanceof HTMLElement && restoreFocus.isConnected) restoreFocus.focus({ preventScroll: true }); restoreFocus = null; if (currentResolver) currentResolver(result); }
+        function ask({ title: heading, message: body, confirmLabel, cancelLabel, tone = 'default', keys=null } = {}) {
+          if (dialog.open) finish(false);activeCopy=keys;
           title.textContent = heading || translate('confirmTitle'); message.textContent = body || ''; cancelButton.textContent = cancelLabel || translate('cancel'); okButton.textContent = confirmLabel || translate('confirmAction'); okButton.classList.toggle('danger', tone === 'danger'); okButton.classList.toggle('primary', tone !== 'danger'); restoreFocus = document.activeElement;
           return new Promise(resolve => { resolver = resolve; dialog.showModal(); requestAnimationFrame(() => cancelButton.focus({ preventScroll: true })); });
         }
         closeButton.addEventListener('click', () => finish(false)); cancelButton.addEventListener('click', () => finish(false)); okButton.addEventListener('click', () => finish(true)); dialog.addEventListener('cancel', event => { event.preventDefault(); finish(false); }); dialog.addEventListener('click', event => { const rect = dialog.getBoundingClientRect(); if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) finish(false); });
-        return Object.freeze({ ask });
+        function relocalize(){if(!dialog.open||!activeCopy)return;title.textContent=translate(activeCopy.title);message.textContent=translate(activeCopy.message);cancelButton.textContent=translate('cancel');okButton.textContent=translate(activeCopy.confirm);}
+        return Object.freeze({ ask, relocalize });
       })();
       window.AppConfirm = AppConfirm;
 
       const AppToast = (() => {
-        const root = $('#appToast'); const message = $('#appToastMessage'); const action = $('#appToastAction'); let timer = 0; let actionHandler = null;
-        function dismiss() { clearTimeout(timer); timer = 0; root.classList.remove('show'); actionHandler = null; }
-        function show({ message: text = '', actionLabel = '', onAction = null, duration = 3200, tone = 'default' } = {}) { clearTimeout(timer); message.textContent = String(text); root.dataset.tone = tone; actionHandler = typeof onAction === 'function' ? onAction : null; action.textContent = actionLabel || ''; action.hidden = !actionHandler || !actionLabel; root.classList.add('show'); if (duration > 0) timer = window.setTimeout(dismiss, duration); return Object.freeze({ dismiss }); }
-        action.addEventListener('click', () => { const handler = actionHandler; dismiss(); if (handler) handler(); });
-        return Object.freeze({ show, dismiss });
+        const root=$('#appToast'),message=$('#appToastMessage'),action=$('#appToastAction');let timer=0,actionHandler=null,current=null,generation=0;
+        function dismiss(){clearTimeout(timer);timer=0;generation++;current=null;actionHandler=null;action.hidden=true;root.classList.remove('show');}
+        function relocalize(){if(!current?.key)return;message.textContent=translate(current.key,current.vars);if(actionHandler)action.textContent=translate('undo');}
+        function show({message:text='',actionLabel='',onAction=null,duration=3200,tone='default',key='',vars={}}={}){
+          clearTimeout(timer);const own=++generation;current=key?{key,vars}:null;message.textContent=String(text);root.dataset.tone=tone;actionHandler=typeof onAction==='function'?onAction:null;action.textContent=actionLabel||'';action.hidden=!actionHandler||!actionLabel;root.classList.add('show');
+          const expire=()=>{if(own!==generation)return;if(root.contains(document.activeElement)){timer=setTimeout(expire,1000);return;}dismiss();};
+          if(duration>0)timer=setTimeout(expire,duration);return Object.freeze({dismiss:()=>{if(own===generation)dismiss();}});
+        }
+        action.addEventListener('click',()=>{const handler=actionHandler;dismiss();if(handler)return handler();});
+        return Object.freeze({show,dismiss,relocalize});
       })();
-      window.AppToast = AppToast;
-      function showToast(message, options = {}) { AppToast.show({ message, ...options }); }
+      window.AppToast=AppToast;
+      function showToast(message,options={}){AppToast.show({message,...options});}
+      function showToastKey(key,vars={},options={}){AppToast.show({message:translate(key,vars),key,vars,...options});}
 
       function getPaperSize() {
         const base = paperPresets[state.paperPreset] || paperPresets.A4;
@@ -1625,7 +1702,7 @@
         selectedPdfPages = new Set(indexes);
         clearPdfPageRange();
         update({ save: false });
-        showToast(translate('pdfPageRangeApplied', { count: indexes.length }), { tone: 'success' });
+        showToastKey('pdfPageRangeApplied',{ count: indexes.length }, { tone: 'success' });
       }
 
       function renderPdfPageSelection() {
@@ -2566,7 +2643,9 @@ Q
 
       function downloadBytes(bytes, filename, type='application/pdf') {
         const url = URL.createObjectURL(new Blob([bytes], { type }));
-        const a = document.createElement('a'); a.href = url; a.download = filename; document.body.append(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url), 1000);
+        let a=null,handedOff=false;
+        try{a=document.createElement('a');a.href=url;a.download=filename;document.body.append(a);a.click();handedOff=true;}
+        finally{try{a?.remove();}finally{if(handedOff)setTimeout(()=>URL.revokeObjectURL(url),1000);else URL.revokeObjectURL(url);}}
       }
       function updatePdfMeta() {
         const root = $('#pdfMeta');
@@ -2629,9 +2708,10 @@ Q
           ? translate('mobileProgress', { done: $('#exportProgressBar').value || 0, total: $('#exportProgressBar').max || 0 })
           : translate('mobileSummary', { count: new Intl.NumberFormat(language).format(count), paper: `${state.paperPreset} · ${translate(state.orientation === 'portrait' ? 'portrait' : 'landscape')}` });
         $('#mobileActionSummary').textContent = summary;
-        $('#mobileExportButton').disabled = exportInProgress ? exportCancelRequested : !ready;
+        ui.setButtonState($('#mobileExportButton'),exportInProgress?(exportCancelRequested?'stopping':'ready'):(ready?'ready':'unavailable'));
+        $('#mobileExportButton').setAttribute('data-bk-variant',exportInProgress?'secondary':'primary');
         $('#mobileExportButton').querySelector('span').textContent = translate(exportInProgress ? 'mobileCancel' : 'mobileSave');
-        $('#mobilePreviewButton').disabled = !sourceReady;
+        ui.setButtonState($('#mobilePreviewButton'),sourceReady?'ready':'unavailable');
       }
 
       function updateExportState({ preserveStatus = false } = {}) {
@@ -2640,17 +2720,20 @@ Q
         const selectedPagesReady = !pdfSource || getSelectedPdfPageIndexes().length > 0;
         const planValid = pdfSource ? Boolean(buildPdfExportPlan()?.valid) : layout.valid;
         const ready = Boolean(sourceReady && selectedPagesReady && planValid && !exportInProgress);
-        $('#exportPdfButton').disabled = !ready;
+        ui.setButtonState($('#exportPdfButton'),exportInProgress?(exportCancelRequested?'stopping':'busy'):(ready?'ready':'unavailable'));
+        ui.setButtonState($('#resetButton'),exportInProgress?'unavailable':'ready');
+        ui.setButtonState($('#cancelExportButton'),exportCancelRequested?'stopping':exportInProgress?'ready':'unavailable');
         $('#exportFilename').disabled = exportInProgress;
         $('#sourceFile').disabled = exportInProgress;
-        $('#removeFileButton').disabled = exportInProgress;
+        ui.setButtonState($('#removeFileButton'),exportInProgress||!selectedFile?'unavailable':'ready');
         syncPdfPageControls();
         const lockSource = Boolean(pdfSource || imageSource?.physicalKnown);
         for (const id of ['sourceWidth', 'sourceHeight', 'finishedWidth', 'finishedHeight', 'sheetCols', 'sheetRows', 'margin', 'overlap', 'calibrationMeasuredX', 'calibrationMeasuredY']) {
           $(`#${id}`).disabled = exportInProgress || (lockSource && (id === 'sourceWidth' || id === 'sourceHeight'));
         }
         updateMobileActionBar();
-        if (exportInProgress || preserveStatus) return;
+        renderCommonUi();
+        if (exportInProgress || preserveStatus || exportFeedback || sourceFeedback || sourceError) return;
         if (!sourceReady) $('#exportStatus').textContent = translate('exportNeedPdf');
         else if (!selectedPagesReady) $('#exportStatus').textContent = translate('exportNeedPages');
         else if (ready) $('#exportStatus').textContent = translate('exportReady');
@@ -2693,12 +2776,13 @@ Q
       }
       async function selectFile(file, { filenameBase = null } = {}) {
         if (!file) return;
-        if (!isSupportedFile(file)) { $('#sourceFile').value = ''; showToast(translate('unsupportedFile'), { tone: 'warning' }); return; }
+        if (!isSupportedFile(file)) { $('#sourceFile').value = ''; showToastKey('unsupportedFile',{}, { tone: 'warning' }); return; }
         invalidateExport();
+        clearSourceFeedback();
         clearPdfPageRange();
-        selectedFile=file; pdfSource=null; imageSource=null; selectedPdfPages=new Set(); activePdfPageIndex=0; clearSourcePreview(); resetExportProgress(); setDefaultExportFilename(file); if (filenameBase !== null) { exportFilenameBase=sanitizeFilenameBase(filenameBase); $('#exportFilename').value=exportFilenameBase; } sourceGeneration+=1; const generation=sourceGeneration; renderSelectedFile(); showToast(translate('fileSelected'));
+        selectedFile=file; pdfSource=null; imageSource=null; selectedPdfPages=new Set(); activePdfPageIndex=0; clearSourcePreview(); resetExportProgress(); setDefaultExportFilename(file); if (filenameBase !== null) { exportFilenameBase=sanitizeFilenameBase(filenameBase); $('#exportFilename').value=exportFilenameBase; } sourceGeneration+=1; const generation=sourceGeneration; renderSelectedFile(); showToastKey('fileSelected',{});
         if (isPdfFile(file)) {
-          $('#sourceNote').textContent=translate('pdfReading'); $('#exportStatus').textContent=translate('pdfReading');
+          sourceFeedback='pdfReading';setExportFeedback('pdfReading');renderCommonUi();
           try {
             const parsed=await parsePdfSource(file,generation); if (!parsed || generation!==sourceGeneration) return; pdfSource=parsed;
             selectedPdfPages=new Set(parsed.pages.map((_,index)=>index)); activePdfPageIndex=0;
@@ -2706,42 +2790,44 @@ Q
             state.sourceWidth=Number(first.widthMm.toFixed(4)); state.sourceHeight=Number(first.heightMm.toFixed(4));
             if (state.sizeMode==='original') { state.finishedWidth=state.sourceWidth; state.finishedHeight=state.sourceHeight; }
             else if (state.sizeMode==='finished' && state.lockAspect) state.finishedHeight=state.finishedWidth/(state.sourceWidth/state.sourceHeight);
-            update(); renderSelectedFile(); $('#sourceNote').textContent=translate('sourceNote'); showToast(translate('pdfReadDone',{count:parsed.pages.length}),{tone:'success'});
+            sourceFeedback='';sourceError='';exportFeedback=null;update(); renderSelectedFile(); $('#sourceNote').textContent=translate('sourceNote'); showToastKey('pdfReadDone',{count:parsed.pages.length},{tone:'success'});
           } catch(error) {
             if (generation!==sourceGeneration) return; pdfSource=null; selectedPdfPages=new Set(); activePdfPageIndex=0; renderSelectedFile(); $('#sourceNote').textContent=translate('sourceNote');
-            const key=error?.message==='encrypted'?'pdfEncrypted':error?.message==='contents'?'pdfUnsupportedContents':'pdfReadError'; $('#exportStatus').textContent=translate(key); showToast(translate(key),{tone:'warning',duration:6000});
+            const key=error?.message==='encrypted'?'pdfEncrypted':error?.message==='contents'?'pdfUnsupportedContents':'pdfReadError'; sourceFeedback='';sourceError=key;setExportFeedback(key);renderCommonUi(); showToastKey(key,{},{tone:'warning',duration:6000});
           }
           return;
         }
-        $('#sourceNote').textContent=translate('imageReading'); $('#exportStatus').textContent=translate('imageReading');
+        sourceFeedback='imageReading';setExportFeedback('imageReading');renderCommonUi();
         try {
           const parsed=await parseImageSource(file,generation); if (!parsed || generation!==sourceGeneration) return; imageSource=parsed; sourcePreviewUrl=URL.createObjectURL(file); applyParsedSourceSize(parsed);
-          update(); renderSelectedFile(); $('#sourceNote').textContent=parsed.physicalKnown?translate('sourceNote'):translate('imageNoPhysical'); showToast(translate('imageReadDone'),{tone:'success'});
+          sourceFeedback='';sourceError='';exportFeedback=null;update(); renderSelectedFile(); $('#sourceNote').textContent=parsed.physicalKnown?translate('sourceNote'):translate('imageNoPhysical'); showToastKey('imageReadDone',{},{tone:'success'});
         } catch(error) {
-          if (generation!==sourceGeneration) return; console.error(error); imageSource=null; clearSourcePreview(); renderSelectedFile(); $('#sourceNote').textContent=translate('sourceNote'); $('#exportStatus').textContent=translate('imageReadError'); showToast(translate('imageReadError'),{tone:'warning',duration:6000});
+          if (generation!==sourceGeneration) return; console.error(error); imageSource=null; clearSourcePreview(); renderSelectedFile(); $('#sourceNote').textContent=translate('sourceNote'); sourceFeedback='';sourceError='imageReadError';setExportFeedback('imageReadError');renderCommonUi(); showToastKey('imageReadError',{},{tone:'warning',duration:6000});
         }
       }
 
       function removeFile() {
         if (!selectedFile) return;
-        const removed=selectedFile, removedPdf=pdfSource, removedImage=imageSource;
+        const removed=selectedFile, removedPdf=pdfSource, removedImage=imageSource, removedResult=lastTiledResult;
         const removedPages=new Set(selectedPdfPages), removedActive=activePdfPageIndex, removedFilename=exportFilenameBase;
         const generationAfterRemove=sourceGeneration+1;
         invalidateExport();
+        clearSourceFeedback();
         clearPdfPageRange();
         selectedFile=null; pdfSource=null; imageSource=null; selectedPdfPages=new Set(); activePdfPageIndex=0; exportFilenameBase=`${APP_CONFIG.slug}-tiled`; $('#exportFilename').value=exportFilenameBase; clearSourcePreview(); resetExportProgress(); sourceGeneration=generationAfterRemove; $('#sourceFile').value=''; $('#sourceNote').textContent=translate('sourceNote'); renderSelectedFile(); renderDynamic();
-        showToast(translate('fileRemoved'), { actionLabel:translate('undo'), duration:5000, onAction:async()=>{
+        showToastKey('fileRemoved',{}, { actionLabel:translate('undo'), duration:5000, onAction:async()=>{
           if (sourceGeneration!==generationAfterRemove) return;
           if (!removedPdf && !removedImage) {
             // A read invalidated by removal cannot finish the restored selection.
             const restoredGeneration = sourceGeneration + 1;
             await selectFile(removed, { filenameBase: removedFilename });
-            if (sourceGeneration === restoredGeneration && (pdfSource || imageSource)) showToast(translate('fileRestored'));
+            if (sourceGeneration === restoredGeneration && (pdfSource || imageSource)) showToastKey('fileRestored',{});
             return;
           }
           clearPdfPageRange();
+          lastTiledResult=removedResult;
           selectedFile=removed; pdfSource=removedPdf; imageSource=removedImage; selectedPdfPages=new Set(removedPages); activePdfPageIndex=removedActive; exportFilenameBase=removedFilename; $('#exportFilename').value=exportFilenameBase; sourceGeneration+=1; if (imageSource) sourcePreviewUrl=URL.createObjectURL(removed); renderSelectedFile();
-          if (pdfSource) { const page=getActivePdfPage() || pdfSource.pages[0]; state.sourceWidth=Number(page.widthMm.toFixed(4)); state.sourceHeight=Number(page.heightMm.toFixed(4)); } else if (imageSource) applyParsedSourceSize(imageSource); update(); showToast(translate('fileRestored'));
+          if (pdfSource) { const page=getActivePdfPage() || pdfSource.pages[0]; state.sourceWidth=Number(page.widthMm.toFixed(4)); state.sourceHeight=Number(page.heightMm.toFixed(4)); } else if (imageSource) applyParsedSourceSize(imageSource); update(); showToastKey('fileRestored',{});
         }});
       }
 
@@ -2758,18 +2844,25 @@ Q
         $('#brandName').textContent = language === 'ja' ? APP_CONFIG.nameJa : APP_CONFIG.name;
         $('#footerName').textContent = language === 'ja' ? APP_CONFIG.nameJa : APP_CONFIG.name;
         $('#versionBadge').textContent = `v${APP_CONFIG.version}`;
-        syncControlsFromState(); renderSelectedFile(); renderDynamic(); updatePdfMeta(); updateExportState();
+        const correction=getCalibrationFactors();$('#calibrationScaleValue').textContent=translate('calibrationScale',{x:(correction.x*100).toFixed(2),y:(correction.y*100).toFixed(2)});
+        renderSelectedFile(); renderDynamic(); updatePdfMeta(); updateExportState();renderCommonUi();AppConfirm.relocalize();AppToast.relocalize();
       }
 
       window.__largePrintTilerTest = Object.freeze({ canvasHasInk, renderPdfPageToCanvas, renderMainPdfPreview, renderGeneratedTilePdfPreview, ensurePdfJs, setTileZoom, fitTileZoom });
 
       loadState();
+      $('#calibrationFilename').value=`${APP_CONFIG.slug}-calibration-100mm`;
+      // Record explicit intent even when the selected value equals an unread fallback default.
+      for(const key of Object.keys(defaultState)){
+        const input=$('#'+key);if(input)input.addEventListener('change',()=>{if(!exportInProgress)layoutTouched.add(key);});
+      }
+      for(const key of ['sizeMode','orientation'])$$(`input[name="${key}"]`).forEach(input=>input.addEventListener('change',()=>{if(input.checked&&!exportInProgress)layoutTouched.add(key);}));
       syncControlsFromState();
       $('#buildVersion').textContent = APP_CONFIG.version;
       $('#builtAt').textContent = BUILD_MANIFEST.generatedAtUtc || '—';
       $('#dependencyCount').textContent = String(BUILD_MANIFEST.dependencies?.length || 0);
 
-      $('#languageButton').addEventListener('click', () => { language = language === 'ja' ? 'en' : 'ja'; writeStorage(storageKeys.language, language); applyLanguage(); });
+      $('#languageButton').addEventListener('click', () => { language = language === 'ja' ? 'en' : 'ja'; languageFailure=!ui.chooseLanguage(language).persisted; applyLanguage(); });
       const helpDialog = $('#helpDialog'); $('#helpButton').addEventListener('click', () => helpDialog.showModal()); $('#closeHelpButton').addEventListener('click', () => helpDialog.close()); helpDialog.addEventListener('cancel', () => {}); helpDialog.addEventListener('click', event => {if(event.target!==helpDialog)return; const rect = helpDialog.getBoundingClientRect(); if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) helpDialog.close(); });
 
       $('#sourceFile').addEventListener('change', event => { if (!exportInProgress) return selectFile(event.target.files?.[0]); });
@@ -2839,7 +2932,14 @@ Q
       $('#calibrationMeasuredX').addEventListener('change', event => setNumericState('calibrationMeasuredX', event.target, { min: 50, max: 150 }));
       $('#calibrationMeasuredY').addEventListener('change', event => setNumericState('calibrationMeasuredY', event.target, { min: 50, max: 150 }));
       $('#calibrationEnabled').addEventListener('change', event => { if (exportInProgress) return; state.calibrationEnabled = event.target.checked; update(); });
-      $('#downloadCalibrationPdf').addEventListener('click', () => { if (exportInProgress) return; const bytes = buildCalibrationPdf(); downloadBytes(bytes, `${APP_CONFIG.slug}-calibration-100mm.pdf`); showToast(translate('calibrationDownloaded'), { tone: 'success' }); });
+      $('#downloadCalibrationPdf').addEventListener('click',()=>{
+        if(exportInProgress||calibrationBusy)return;
+        const name=sanitizeFilenameBase($('#calibrationFilename').value||`${APP_CONFIG.slug}-calibration-100mm`)+'.pdf';
+        calibrationBusy=true;renderCommonUi();
+        try{downloadBytes(buildCalibrationPdf(),name);calibrationDelivery={error:false,name};}
+        catch{calibrationDelivery.error=true;}
+        finally{calibrationBusy=false;renderCommonUi();}
+      });
       $('#showTrimLines').addEventListener('change', event => { if (exportInProgress) return; state.showTrimLines = event.target.checked; update(); });
       $('#showRegistrationMarks').addEventListener('change', event => { if (exportInProgress) return; state.showRegistrationMarks = event.target.checked; update(); });
       $('#showTileLabels').addEventListener('change', event => { if (exportInProgress) return; state.showTileLabels = event.target.checked; update(); });
@@ -2871,8 +2971,14 @@ Q
         exportCancelRequested = true;
         if (activeExport) activeExport.cancelled = true;
         $('#cancelExportButton').disabled = true;
-        $('#exportStatus').textContent = translate('exportCancelling');
-        updateMobileActionBar();
+        setExportFeedback('exportCancelling');
+        updateExportState();
+      });
+      $('#savePreviousOutput').addEventListener('click',()=>{
+        const result=lastTiledResult;if(!result)return;
+        try{downloadBytes(result.bytes,result.filename);previousError='';showToastKey('previousStarted',{name:result.filename});}
+        catch{previousError='downloadFailed';}
+        renderCommonUi();
       });
       $('#exportPdfButton').addEventListener('click', async () => {
         if (exportInProgress) return;
@@ -2891,7 +2997,7 @@ Q
         const total = pdfSource ? pdfPlan.totalOutputPages : layout.count + (state.includeAssemblyMap ? 1 : 0);
         setExportProgress(0,total);
         $('#cancelExportButton').hidden = false; $('#cancelExportButton').disabled = false;
-        $('#exportStatus').textContent = translate('exportWorking');
+        setExportFeedback('exportWorking');
         updateExportState();
         try {
           await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
@@ -2904,15 +3010,15 @@ Q
           const bytes = job.pdf ? await buildTiledPdf(job.pdf, pdfPlan.indexes, options) : await buildTiledImagePdf(job.image, job.file, layout, options);
           ensureExportActive(options);
           downloadBytes(bytes, `${job.filename}.pdf`);
+          lastTiledResult={bytes,filename:`${job.filename}.pdf`};exportError='';previousError='';
           setExportProgress(total,total); $('#cancelExportButton').hidden = true;
-          const message = translate('exportDone', { count: total });
-          $('#exportStatus').textContent = message; showToast(message, { tone: 'success' });
+          setExportFeedback('exportDone',{count:total}); showToastKey('exportDone',{count:total},{tone:'success'});
         } catch (error) {
           if (!ownsExport(job)) return;
           if (error?.message === 'export-cancelled') {
-            resetExportProgress(); $('#exportStatus').textContent = translate('exportCancelled'); showToast(translate('exportCancelled'));
+            resetExportProgress(); setExportFeedback('exportCancelled'); showToastKey('exportCancelled',{});
           } else {
-            console.error(error); resetExportProgress(); $('#exportStatus').textContent = translate('pdfExportError'); showToast(translate('pdfExportError'), { tone: 'warning' });
+            console.error(error); resetExportProgress(); exportError='pdfExportError';setExportFeedback('pdfExportError'); showToastKey('pdfExportError',{}, { tone: 'warning' });
           }
         } finally {
           if (ownsExport(job)) {
@@ -2924,11 +3030,13 @@ Q
       $('#resetButton').addEventListener('click', async () => {
         if (exportInProgress) return;
         const generation = sourceGeneration, previousExport = exportSequence;
-        const ok = await AppConfirm.ask({ title: translate('resetTitle'), message: translate('resetMessage'), confirmLabel: translate('resetConfirm'), cancelLabel: translate('cancel') });
+        const ok = await AppConfirm.ask({ title: translate('resetTitle'), message: translate('resetMessage'), confirmLabel: translate('resetConfirm'), cancelLabel: translate('cancel'),tone:'danger',keys:{title:'resetTitle',message:'resetMessage',confirm:'resetConfirm'} });
         if (!ok || exportInProgress || generation !== sourceGeneration || previousExport !== exportSequence) return;
         invalidateExport();
+        clearSourceFeedback();
         clearPdfPageRange();
-        state = { ...defaultState }; selectedFile = null; pdfSource = null; imageSource = null; selectedPdfPages=new Set(); activePdfPageIndex=0; exportFilenameBase=`${APP_CONFIG.slug}-tiled`; $('#exportFilename').value=exportFilenameBase; clearSourcePreview(); resetExportProgress(); sourceGeneration += 1; $('#sourceFile').value = ''; renderSelectedFile(); update(); showToast(translate('resetDone'), { tone: 'success' });
+        Object.keys(defaultState).forEach(key=>layoutTouched.add(key));
+        state = { ...defaultState }; selectedFile = null; pdfSource = null; imageSource = null; selectedPdfPages=new Set(); activePdfPageIndex=0; exportFilenameBase=`${APP_CONFIG.slug}-tiled`; $('#exportFilename').value=exportFilenameBase; clearSourcePreview(); resetExportProgress(); sourceGeneration += 1; $('#sourceFile').value = ''; renderSelectedFile(); update(); showToastKey('resetDone',{}, { tone: 'success' });
       });
 
       applyLanguage();
