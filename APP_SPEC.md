@@ -239,3 +239,5 @@ Shared fixed v1 buttons use native ready/unavailable/busy/stopping semantics; ca
 The PDF parsing, tiling, vector/image builders, geometry, calibration bytes and embedded dependencies are unchanged. Browser/OS delivery, PDF preview rendering, physical print size and device geometry require manual acceptance described in `docs/COMMON_UI_ACCEPTANCE.md`.
 
 Read-recovery Retry is disabled and guarded during PDF generation, so accepting stored settings cannot alter an already accepted job. It becomes available after generation/cancellation finishes.
+
+Generation also disables checkbox, paper, sizing-mode and orientation controls. Queued changes restore their accepted visual values without changing the job or saving new settings.

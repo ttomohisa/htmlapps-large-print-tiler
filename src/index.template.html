@@ -2733,6 +2733,8 @@ Q
         for (const id of ['sourceWidth', 'sourceHeight', 'finishedWidth', 'finishedHeight', 'sheetCols', 'sheetRows', 'margin', 'overlap', 'calibrationMeasuredX', 'calibrationMeasuredY']) {
           $(`#${id}`).disabled = exportInProgress || (lockSource && (id === 'sourceWidth' || id === 'sourceHeight'));
         }
+        for(const id of ['lockAspect','paperPreset','calibrationEnabled','showTrimLines','showRegistrationMarks','showTileLabels','includeAssemblyMap'])$('#'+id).disabled=exportInProgress;
+        for(const key of ['sizeMode','orientation'])$$(`input[name="${key}"]`).forEach(input=>{input.disabled=exportInProgress;});
         updateMobileActionBar();
         renderCommonUi();
         if (exportInProgress || preserveStatus || exportFeedback || sourceFeedback || sourceError) return;
@@ -2856,9 +2858,9 @@ Q
       $('#calibrationFilename').value=`${APP_CONFIG.slug}-calibration-100mm`;
       // Record explicit intent even when the selected value equals an unread fallback default.
       for(const key of Object.keys(defaultState)){
-        const input=$('#'+key);if(input)input.addEventListener('change',()=>{if(!exportInProgress)layoutTouched.add(key);});
+        const input=$('#'+key);if(input)input.addEventListener('change',()=>{if(exportInProgress){if(typeof state[key]==='boolean')input.checked=state[key];else input.value=state[key];return;}layoutTouched.add(key);});
       }
-      for(const key of ['sizeMode','orientation'])$$(`input[name="${key}"]`).forEach(input=>input.addEventListener('change',()=>{if(input.checked&&!exportInProgress)layoutTouched.add(key);}));
+      for(const key of ['sizeMode','orientation'])$$(`input[name="${key}"]`).forEach(input=>input.addEventListener('change',()=>{if(exportInProgress){$$(`input[name="${key}"]`).forEach(control=>{control.checked=control.value===state[key];});return;}if(input.checked)layoutTouched.add(key);}));
       syncControlsFromState();
       $('#buildVersion').textContent = APP_CONFIG.version;
       $('#builtAt').textContent = BUILD_MANIFEST.generatedAtUtc || '—';

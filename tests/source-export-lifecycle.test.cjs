@@ -48,7 +48,7 @@ function harness() {
     console: { error: error => errors.push(error) }, setTimeout,
     URL: { createObjectURL: file => `blob:${file.name}`, revokeObjectURL(){} },
     APP_CONFIG: { slug: 'large-print-tiler' }, PDF_MM_PER_POINT: 25.4/72, PDF_POINTS_PER_MM:72/25.4, CSS_MM_PER_PX:25.4/96,
-    $: node, translate: key => key, requestAnimationFrame: fn => frameGate ? frameGate.promise.then(fn) : setImmediate(fn),
+    $: node, $$: () => [], translate: key => key, requestAnimationFrame: fn => frameGate ? frameGate.promise.then(fn) : setImmediate(fn),
     document: { createElement: () => ({ width:0, height:0, getContext: () => ({ clearRect(){}, drawImage(){}, getImageData: (_x,_y,w,h) => ({ data: new Uint8Array(w*h*4).fill(255) }) }) }) },
     AppConfirm: { ask: () => confirm.promise },
     translations:{en:{},ja:{}},BrowserKittyUI:{setButtonState(el,state){el.disabled=state!=='ready';el.setAttribute('data-bk-state',state);}},
