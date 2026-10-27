@@ -237,3 +237,5 @@ Both tiled and neutral 100 mm calibration PDFs have editable filenames. Completi
 Shared fixed v1 buttons use native ready/unavailable/busy/stopping semantics; cancellation remains cooperative. Each storage/language/source/main-output/calibration/previous-output failure has its own recovery state. Language uses valid URL, common preference, read-only legacy preference, ordered browser languages, then English; startup never writes. Explicit switching writes the common preference only. Numeric/page-range drafts, selection, active jobs, focused Undo and confirmation survive translation.
 
 The PDF parsing, tiling, vector/image builders, geometry, calibration bytes and embedded dependencies are unchanged. Browser/OS delivery, PDF preview rendering, physical print size and device geometry require manual acceptance described in `docs/COMMON_UI_ACCEPTANCE.md`.
+
+Read-recovery Retry is disabled and guarded during PDF generation, so accepting stored settings cannot alter an already accepted job. It becomes available after generation/cancellation finishes.

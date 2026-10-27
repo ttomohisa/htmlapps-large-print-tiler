@@ -1342,6 +1342,7 @@
         ui.setSaveStatus($('#layoutSaveStatus'),{mode:'autosave',state:layoutSaveState,language,time:layoutSavedTime});
         $('#layoutReadNotice').textContent=layoutReadBlocked?translate('layoutReadFailed'):'';
         $('#retryLayoutSave').hidden=layoutSaveState!=='error';
+        ui.setButtonState($('#retryLayoutSave'),exportInProgress?'unavailable':'ready');
         $('#languageNotice').textContent=languageFailure?ui.text('languageSessionOnly',language):'';
         $('#calibrationStatus').textContent=calibrationDelivery.error?translate('downloadFailed'):calibrationDelivery.name?ui.text('downloadStarted',language)+': '+calibrationDelivery.name:'';
         ui.setButtonState($('#downloadCalibrationPdf'),calibrationBusy?'busy':exportInProgress?'unavailable':'ready');
@@ -1400,6 +1401,7 @@
         renderCommonUi();
       }
       $('#retryLayoutSave').addEventListener('click',()=>{
+        if(exportInProgress)return;
         if(layoutReadBlocked){const current={...state},touched=[...layoutTouched];if(!loadState()){renderCommonUi();return;}for(const key of touched)state[key]=current[key];}
         saveState();update({save:false});
       });
